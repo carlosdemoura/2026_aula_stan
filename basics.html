@@ -138,7 +138,6 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -199,14 +198,14 @@ window.Quarto = {
   <ul>
   <li><a href="#sobre-o-stan" id="toc-sobre-o-stan" class="nav-link active" data-scroll-target="#sobre-o-stan"><span class="header-section-number">2.1</span> Sobre o STAN</a>
   <ul class="collapse">
-  <li><a href="#compilação-vs.-estimação" id="toc-compilação-vs.-estimação" class="nav-link" data-scroll-target="#compilação-vs.-estimação"><span class="header-section-number">2.1.1</span> Compilação vs.&nbsp;estimação</a></li>
+  <li><a href="#compilação-vs.-estimação" id="toc-compilação-vs.-estimação" class="nav-link" data-scroll-target="#compilação-vs.-estimação">Compilação vs.&nbsp;estimação</a></li>
   </ul></li>
   <li><a href="#blocos" id="toc-blocos" class="nav-link" data-scroll-target="#blocos"><span class="header-section-number">2.2</span> Blocos</a>
   <ul class="collapse">
-  <li><a href="#bloco-data" id="toc-bloco-data" class="nav-link" data-scroll-target="#bloco-data"><span class="header-section-number">2.2.1</span> Bloco data</a></li>
-  <li><a href="#bloco-parameters-transformed-parameters" id="toc-bloco-parameters-transformed-parameters" class="nav-link" data-scroll-target="#bloco-parameters-transformed-parameters"><span class="header-section-number">2.2.2</span> Bloco parameters &amp; transformed parameters</a></li>
-  <li><a href="#bloco-model" id="toc-bloco-model" class="nav-link" data-scroll-target="#bloco-model"><span class="header-section-number">2.2.3</span> Bloco model</a></li>
-  <li><a href="#bloco-functions" id="toc-bloco-functions" class="nav-link" data-scroll-target="#bloco-functions"><span class="header-section-number">2.2.4</span> Bloco functions</a></li>
+  <li><a href="#bloco-data" id="toc-bloco-data" class="nav-link" data-scroll-target="#bloco-data">Bloco data</a></li>
+  <li><a href="#bloco-parameters-transformed-parameters" id="toc-bloco-parameters-transformed-parameters" class="nav-link" data-scroll-target="#bloco-parameters-transformed-parameters">Bloco parameters &amp; transformed parameters</a></li>
+  <li><a href="#bloco-model" id="toc-bloco-model" class="nav-link" data-scroll-target="#bloco-model">Bloco model</a></li>
+  <li><a href="#bloco-functions" id="toc-bloco-functions" class="nav-link" data-scroll-target="#bloco-functions">Bloco functions</a></li>
   </ul></li>
   <li><a href="#argumentos-importantes" id="toc-argumentos-importantes" class="nav-link" data-scroll-target="#argumentos-importantes"><span class="header-section-number">2.3</span> Argumentos importantes</a></li>
   <li><a href="#extraindo-e-analisando-a-amostra" id="toc-extraindo-e-analisando-a-amostra" class="nav-link" data-scroll-target="#extraindo-e-analisando-a-amostra"><span class="header-section-number">2.4</span> Extraindo e analisando a amostra</a></li>
@@ -245,8 +244,8 @@ window.Quarto = {
 <h2 data-number="2.1" class="anchored" data-anchor-id="sobre-o-stan"><span class="header-section-number">2.1</span> Sobre o STAN</h2>
 <p>O STAN é um software que usa uma sintaxe própria para implementar seu algoritmo de amostragem MCMC. Por conta disso é comum que se diga que STAN é também uma linguagem de programação. Como o STAN foi escrito em C++, a sintaxe que ele requer para a escrita dos scripts tem muitas similaridades com a dessa linguagem, mas também incorpora certos elementos de linguagens interpretadas como o R. Esse é o caso de estruturas como condições, laços e alguns operadores (como soma e multiplicação matriciais).</p>
 <p>A principal diferença entre a sintaxe STAN e a de linguagens interpretadas é a tipagem. Como os algoritmos podem ser pesados</p>
-<section id="compilação-vs.-estimação" class="level3" data-number="2.1.1">
-<h3 data-number="2.1.1" class="anchored" data-anchor-id="compilação-vs.-estimação"><span class="header-section-number">2.1.1</span> Compilação vs.&nbsp;estimação</h3>
+<section id="compilação-vs.-estimação" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="compilação-vs.-estimação">Compilação vs.&nbsp;estimação</h3>
 <p>O uso do STAN pode ser dividido em duas etapas: compilação do modelo e construção da cadeia. Uma vez que o modelo está bem especificado (e o script STAN está pronto), é necessário compilar esse código em um arquivo executável (é esse arquivo que tomará amostras de uma cadeia MCMC). Note que</p>
 </section>
 </section>
@@ -259,23 +258,23 @@ window.Quarto = {
 <li>verossimilhança (ou a distribuição dos dados condicionados aos parâmetros)</li>
 <li>distribuições prioris dos parâmetros</li>
 </ul>
-<section id="bloco-data" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="bloco-data"><span class="header-section-number">2.2.1</span> Bloco data</h3>
+<section id="bloco-data" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="bloco-data">Bloco data</h3>
 </section>
-<section id="bloco-parameters-transformed-parameters" class="level3" data-number="2.2.2">
-<h3 data-number="2.2.2" class="anchored" data-anchor-id="bloco-parameters-transformed-parameters"><span class="header-section-number">2.2.2</span> Bloco parameters &amp; transformed parameters</h3>
+<section id="bloco-parameters-transformed-parameters" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="bloco-parameters-transformed-parameters">Bloco parameters &amp; transformed parameters</h3>
 <p>Todas as variáveis especificadas nesse bloco devem obrigatoriamente</p>
 </section>
-<section id="bloco-model" class="level3" data-number="2.2.3">
-<h3 data-number="2.2.3" class="anchored" data-anchor-id="bloco-model"><span class="header-section-number">2.2.3</span> Bloco model</h3>
+<section id="bloco-model" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="bloco-model">Bloco model</h3>
 </section>
-<section id="bloco-functions" class="level3" data-number="2.2.4">
-<h3 data-number="2.2.4" class="anchored" data-anchor-id="bloco-functions"><span class="header-section-number">2.2.4</span> Bloco functions</h3>
+<section id="bloco-functions" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="bloco-functions">Bloco functions</h3>
 </section>
 </section>
 <section id="argumentos-importantes" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="argumentos-importantes"><span class="header-section-number">2.3</span> Argumentos importantes</h2>
-<p>O help pode ser acessado via <code>?rstan::sampling</code> ou <code>?rstan::rstan</code></p>
+<p>O help pode ser acessado via <code>?rstan::sampling</code> ou <code>?rstan::stan</code></p>
 <ul>
 <li><code>chains</code>: o número de cadeias que se deseja rodar</li>
 <li><code>init</code>: aqui ficam armazenados os valores do chute inicial das cadeias. Esse argumento deve ser obrigatoriamente uma lista de listas em que, no primeiro nível, fica a cadeia e, no segundo nível, uma lista nomeada com os parâmetros especificados no <code>.stan</code> e cujos valores são o chute inicial da cadeia. Note que deve sempre valer <code>length(init) == chains</code>. No exemplo abaixo, o modelo tem dois parâmetros (<span class="math inline">\(\alpha\)</span> e <span class="math inline">\(\beta\)</span>) e na primeira cadeia o chute inicial é <span class="math inline">\(\alpha_0 = 2, \beta_0=3\)</span> enquanto na segunda cadeia é <span class="math inline">\(\alpha_0 = -1, \beta_0=0\)</span>.</li>
