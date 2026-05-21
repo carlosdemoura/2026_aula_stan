@@ -1,0 +1,31 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Aula sobre STAN"
+  author: "Carlos de Moura"
+  date: "2026"
+  chapters:
+    - index.qmd
+    - basics.qmd
+
+lang: pt
+
+bibliography: bib.bib
+csl: apa-5th-edition.csl
+nocite: |
+  @*
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    code-fold: false
+    css: styles.css
+
+execute:
+  freeze: auto
+  warning: false
+  message: false

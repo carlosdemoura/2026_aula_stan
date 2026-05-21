@@ -1,0 +1,10 @@
+---
+title: "Aula sobre STAN"
+author: "Carlos"
+format: html
+---
+
+## Setup do ambiente
+
+
+
