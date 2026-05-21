@@ -1,0 +1,8 @@
+---
+title: "Setup do ambiente para usar rstan"
+author: "Carlos"
+format: html
+---
+
+## Instalando pacotes 
+

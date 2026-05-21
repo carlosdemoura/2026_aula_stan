@@ -1,0 +1,87 @@
+---
+title: "Estrutura básica de um arquivo stan"
+author: "Carlos"
+format: html
+---
+
+## Sobre o STAN
+
+O STAN é um software que usa uma sintaxe própria para implementar seu algoritmo de amostragem MCMC. Por conta disso é comum que se diga que STAN é também uma linguagem de programação.
+Como o STAN foi escrito em C++, a sintaxe que ele requer para a escrita dos scripts tem muitas similaridades com a dessa linguagem, mas também incorpora certos elementos de linguagens interpretadas como o R. Esse é o caso de estruturas como condições, laços e alguns operadores (como soma e multiplicação matriciais).
+
+A principal diferença entre a sintaxe STAN e a de linguagens interpretadas é a tipagem. Como os algoritmos podem ser pesados
+
+### Compilação vs. estimação
+
+O uso do STAN pode ser dividido em duas etapas: compilação do modelo e construção da cadeia. Uma vez que o modelo está bem especificado (e o script STAN está pronto), é necessário compilar esse código em um arquivo executável (é esse arquivo que tomará amostras de uma cadeia MCMC). Note que 
+
+
+## Blocos 
+
+Um modelo bayesiano está bem especificado se estão bem definidos os seguintes elementos:
+
+* espaço paramétrico
+* espaço amostral
+* verossimilhança (ou a distribuição dos dados condicionados aos parâmetros) 
+* distribuições prioris dos parâmetros
+
+### Bloco data
+
+### Bloco parameters & transformed parameters
+
+Todas as variáveis especificadas nesse bloco devem obrigatoriamente
+
+### Bloco model
+
+### Bloco functions
+
+
+## Argumentos importantes
+
+O help pode ser acessado via `?rstan::sampling` ou `?rstan::rstan`
+
+* `chains`: o número de cadeias que se deseja rodar
+* `init`: aqui ficam armazenados os valores do chute inicial das cadeias. Esse argumento deve ser obrigatoriamente uma lista de listas em que, no primeiro nível, fica a cadeia e, no segundo nível, uma lista nomeada com os parâmetros especificados no `.stan` e cujos valores são o chute inicial da cadeia.
+Note que deve sempre valer `length(init) == chains`.
+No exemplo abaixo, o modelo tem dois parâmetros ($\alpha$ e $\beta$) e na primeira cadeia o chute inicial é $\alpha_0 = 2, \beta_0=3$ enquanto na segunda cadeia é  $\alpha_0 = -1, \beta_0=0$.
+
+```{r}
+init =
+  list(
+    list(alpha = 2, beta = 3),
+    list(alpha = -1, beta = 0),
+    list("random"),
+    list(0)
+  )
+```
+
+:::
+Caso o usuário não especifique um chute incial, o algoritmo do STAN tenta escolher valores segundo a seguinte regra
+
+Caso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, em geral está associado a um modelo mal especifico ou a erros na escrita o script `.stan`.
+:::
+
+* `iter`: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).
+* `warmup`: o número de iterações que serão excluídas, por default o STAN escolhe o warmup como sendo igual a metade das iterações.
+
+:::
+Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), `warmup` e `iter` podem ter significados diferentes dos do rstan. É possível que `iter` signifique o número de amostras que o programa vai tomar após o `warmup`, então o total de iterações é dado por `warmup` + `iter`. No caso do rstan o total de iterações é `iter` - e, nesse caso, o tamanho da amostra da posteriori é `iter` - `warmup`.
+:::
+
+* `cores`: .
+* `data`: 
+* `pars`: 
+* `seed`: 
+
+## Extraindo e analisando a amostra
+
+::: {.callout-caution collapse="true"}
+### Porque não é uma boa ideia diminuir o tamanho do warmup?
+
+É comum que
+
+Essa filosofia é tão forte no pacote que não é possível alterar o valor do warmup uma vez que a amostragem foi feita. Assim, a função `rstan::extract` não aceita um argumento de warmup e nem é possível alterar esse atributo num objeto da classe `stanfit`, via `@`
+:::
+
+Em estatística Bayesiana, o objeto de toda inferência é a distribuição posteriori. Em particular estamos interessados em resumos essa distribuição, como esperança, mediana, desvio padrão. Outro resumo interessante é o interv
+
