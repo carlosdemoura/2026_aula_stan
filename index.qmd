@@ -4,7 +4,25 @@ author: "Carlos"
 format: html
 ---
 
-## Setup do ambiente
+## Sobre {.unnumbered}
 
+::: {style="text-align: right"}
+"Nunca ouviste passar o vento.<br>
+O vento só fala do vento.<br>
+O que lhe ouviste foi mentira,<br>
+E a mentira está em ti.<br>
+Pessoa
+:::
 
+Este é o [material auxiliar](https://github.com/carlosdemoura/2026_aula_stan_dani) da apresentação sobre STAN para a turma de Inferência Bayesiana (DCC/DEST-UFMG, 2026/1).
 
+## Setup do ambiente {.unnumbered}
+
+```{r}
+#| eval: false
+if (!"pak" %in% installed.packages()[,"Package"]) install.packages("pak")
+
+c("tidyverse", "rstan", "coda", "deldir", "posterior", "shinystan") |>
+  setdiff(installed.packages()[,"Package"]) |>
+  pak::pak()
+```

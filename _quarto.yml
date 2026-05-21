@@ -13,7 +13,6 @@ book:
 lang: pt
 
 bibliography: bib.bib
-csl: apa-5th-edition.csl
 nocite: |
   @*
 
@@ -23,7 +22,6 @@ format:
       - cosmo
       - brand
     code-fold: false
-    css: styles.css
 
 execute:
   freeze: auto
