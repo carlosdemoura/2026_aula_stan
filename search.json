@@ -4,7 +4,27 @@
     "href": "index.html",
     "title": "Aula sobre STAN",
     "section": "",
-    "text": "0.1 Setup do ambiente",
+    "text": "Sobre\nEste é o material auxiliar da apresentação sobre STAN para a turma de Inferência Bayesiana (DCC/DEST-UFMG, 2026/1).",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Aula sobre STAN</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#sobre",
+    "href": "index.html#sobre",
+    "title": "Aula sobre STAN",
+    "section": "",
+    "text": "“Nunca ouviste passar o vento. O vento só fala do vento. O que lhe ouviste foi mentira, E a mentira está em ti. Pessoa",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Aula sobre STAN</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#setup-do-ambiente",
+    "href": "index.html#setup-do-ambiente",
+    "title": "Aula sobre STAN",
+    "section": "Setup do ambiente",
+    "text": "Setup do ambiente\n\nif (!\"pak\" %in% installed.packages()[,\"Package\"]) install.packages(\"pak\")\n\nc(\"tidyverse\", \"rstan\", \"coda\", \"deldir\", \"posterior\", \"shinystan\") |&gt;\n  setdiff(installed.packages()[,\"Package\"]) |&gt;\n  pak::pak()",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Aula sobre STAN</span>"
     ]
@@ -44,7 +64,7 @@
     "href": "basics.html#argumentos-importantes",
     "title": "2  Estrutura básica de um arquivo stan",
     "section": "2.3 Argumentos importantes",
-    "text": "2.3 Argumentos importantes\nO help pode ser acessado via ?rstan::sampling ou ?rstan::stan\n\nchains: o número de cadeias que se deseja rodar\ninit: aqui ficam armazenados os valores do chute inicial das cadeias. Esse argumento deve ser obrigatoriamente uma lista de listas em que, no primeiro nível, fica a cadeia e, no segundo nível, uma lista nomeada com os parâmetros especificados no .stan e cujos valores são o chute inicial da cadeia. Note que deve sempre valer length(init) == chains. No exemplo abaixo, o modelo tem dois parâmetros (\\(\\alpha\\) e \\(\\beta\\)) e na primeira cadeia o chute inicial é \\(\\alpha_0 = 2, \\beta_0=3\\) enquanto na segunda cadeia é \\(\\alpha_0 = -1, \\beta_0=0\\).\n\n\ninit =\n  list(\n    list(alpha = 2, beta = 3),\n    list(alpha = -1, beta = 0),\n    list(\"random\"),\n    list(0)\n  )\n\n::: Caso o usuário não especifique um chute incial, o algoritmo do STAN tenta escolher valores segundo a seguinte regra\nCaso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, em geral está associado a um modelo mal especifico ou a erros na escrita o script .stan. :::\n\niter: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).\nwarmup: o número de iterações que serão excluídas, por default o STAN escolhe o warmup como sendo igual a metade das iterações.\n\n::: Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), warmup e iter podem ter significados diferentes dos do rstan. É possível que iter signifique o número de amostras que o programa vai tomar após o warmup, então o total de iterações é dado por warmup + iter. No caso do rstan o total de iterações é iter - e, nesse caso, o tamanho da amostra da posteriori é iter - warmup. :::\n\ncores: .\ndata:\npars:\nseed:",
+    "text": "2.3 Argumentos importantes\nO help pode ser acessado via ?rstan::sampling ou ?rstan::stan\n\nchains: o número de cadeias que se deseja rodar\ninit: aqui ficam armazenados os valores do chute inicial das cadeias. Esse argumento deve ser obrigatoriamente uma lista de listas em que, no primeiro nível, fica a cadeia e, no segundo nível, uma lista nomeada com os parâmetros especificados no .stan e cujos valores são o chute inicial da cadeia. Note que deve sempre valer length(init) == chains. No exemplo abaixo, o modelo tem dois parâmetros (\\(\\alpha\\) e \\(\\beta\\)) e na primeira cadeia o chute inicial é \\(\\alpha_0 = 2, \\beta_0=3\\) enquanto na segunda cadeia é \\(\\alpha_0 = -1, \\beta_0=0\\).\n\n\ninit =\n  list(\n    list(alpha = 2, beta = 3),\n    list(alpha = -1, beta = 0),\n    list(\"random\"),\n    list(0)\n  )\n\n\n\n\n\n\n\nDicaSobre chutes iniciais\n\n\n\nCaso o usuário não especifique um chute incial, o algoritmo do STAN tenta escolher valores segundo a seguinte regra\nCaso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, em geral está associado a um modelo mal especifico ou a erros na escrita o script .stan.\n\n\n\niter: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).\nwarmup: o número de iterações que serão excluídas, por default o STAN escolhe o warmup como sendo igual a metade das iterações.\n\n\n\n\n\n\n\nNotaConversando na torre de Babel\n\n\n\nEm alguns softwares de estimação de distribuições (inclusive o CMDSTAN), warmup e iter podem ter significados diferentes dos do rstan. É possível que iter signifique o número de amostras que o programa vai tomar após o warmup, então o total de iterações é dado por warmup + iter. No caso do rstan o total de iterações é iter - e, nesse caso, o tamanho da amostra da posteriori é iter - warmup.\n\n\n\ncores: .\ndata:\npars:\nseed:",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Estrutura básica de um arquivo stan</span>"
     ]
