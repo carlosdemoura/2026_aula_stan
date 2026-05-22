@@ -5,10 +5,11 @@ project:
 book:
   title: "Aula sobre STAN"
   author: "Carlos de Moura"
-  date: "2026"
+  date: "05-27-2026"
   chapters:
     - index.qmd
     - basics.qmd
+    - models.qmd
 
 lang: pt
 

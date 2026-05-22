@@ -1,8 +1,8 @@
 {
-  "hash": "0033fe4154ccd980684cf9c214564c66",
+  "hash": "9b1c95ee25b0a466b05bff59db6a0b32",
   "result": {
     "engine": "knitr",
-    "markdown": "---\ntitle: \"Aula sobre STAN\"\nauthor: \"Carlos\"\nformat: html\n---\n\n## Sobre {.unnumbered}\n\n::: {style=\"text-align: right\"}\n\"Nunca ouviste passar o vento.<br>\nO vento só fala do vento.<br>\nO que lhe ouviste foi mentira,<br>\nE a mentira está em ti.<br>\nPessoa\n:::\n\nEste é o [material auxiliar](https://github.com/carlosdemoura/2026_aula_stan_dani) da apresentação sobre STAN para a turma de Inferência Bayesiana (DCC/DEST-UFMG, 2026/1).\n\n## Setup do ambiente {.unnumbered}\n\n\n::: {.cell}\n\n```{.r .cell-code}\nif (!\"pak\" %in% installed.packages()[,\"Package\"]) install.packages(\"pak\")\n\nc(\"tidyverse\", \"rstan\", \"coda\", \"deldir\", \"posterior\", \"shinystan\") |>\n  setdiff(installed.packages()[,\"Package\"]) |>\n  pak::pak()\n```\n:::\n\n",
+    "markdown": "---\ntitle: \"Introdução\"\n---\n\n::: {style=\"text-align: right\"}\n\"Nunca ouviste passar o vento.<br>\nO vento só fala do vento.<br>\nO que lhe ouviste foi mentira,<br>\nE a mentira está em ti.<br>\nPessoa\n:::\n\n## Sobre {.unnumbered}\n\nEste é o [material auxiliar](https://github.com/carlosdemoura/2026_aula_stan_dani) da apresentação sobre STAN para a turma de Inferência Bayesiana (DCC/DEST-UFMG, 2026/1).\n\n## Setup do ambiente {.unnumbered}\n\n\n::: {.cell}\n\n```{.r .cell-code}\nif (!\"pak\" %in% installed.packages()[,\"Package\"]) install.packages(\"pak\")\n\nc(\"tidyverse\", \"rstan\", \"coda\", \"deldir\", \"posterior\", \"shinystan\") |>\n  setdiff(installed.packages()[,\"Package\"]) |>\n  pak::pak()\n```\n:::\n\n\n# Referências {.unnumbered}\n\n::: {#refs}\n:::",
     "supporting": [],
     "filters": [
       "rmarkdown/pagebreak.lua"

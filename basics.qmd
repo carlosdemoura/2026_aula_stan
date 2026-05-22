@@ -1,7 +1,5 @@
 ---
 title: "Estrutura básica de um arquivo stan"
-author: "Carlos"
-format: html
 ---
 
 ## Sobre o STAN

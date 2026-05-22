@@ -6,7 +6,7 @@
     "section": "",
     "text": "Sobre\nEste é o material auxiliar da apresentação sobre STAN para a turma de Inferência Bayesiana (DCC/DEST-UFMG, 2026/1).",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Aula sobre STAN</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introdução</span>"
     ]
   },
   {
@@ -26,7 +26,7 @@
     "section": "Setup do ambiente",
     "text": "Setup do ambiente\n\nif (!\"pak\" %in% installed.packages()[,\"Package\"]) install.packages(\"pak\")\n\nc(\"tidyverse\", \"rstan\", \"coda\", \"deldir\", \"posterior\", \"shinystan\") |&gt;\n  setdiff(installed.packages()[,\"Package\"]) |&gt;\n  pak::pak()",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Aula sobre STAN</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introdução</span>"
     ]
   },
   {
@@ -74,9 +74,39 @@
     "href": "basics.html#extraindo-e-analisando-a-amostra",
     "title": "2  Estrutura básica de um arquivo stan",
     "section": "2.4 Extraindo e analisando a amostra",
-    "text": "2.4 Extraindo e analisando a amostra\n\n\n\n\n\n\nCuidadoPorque não é uma boa ideia diminuir o tamanho do warmup?\n\n\n\n\n\nÉ comum que\nEssa filosofia é tão forte no pacote que não é possível alterar o valor do warmup uma vez que a amostragem foi feita. Assim, a função rstan::extract não aceita um argumento de warmup e nem é possível alterar esse atributo num objeto da classe stanfit, via @\n\n\n\nEm estatística Bayesiana, o objeto de toda inferência é a distribuição posteriori. Em particular estamos interessados em resumos essa distribuição, como esperança, mediana, desvio padrão. Outro resumo interessante é o interv",
+    "text": "2.4 Extraindo e analisando a amostra\n\n\n\n\n\n\nCuidadoPorque não é uma boa ideia diminuir o tamanho do warmup?\n\n\n\n\n\nÉ comum que\nEssa filosofia é tão forte no pacote que não é possível alterar o valor do warmup uma vez que a amostragem foi feita. Assim, a função rstan::extract não aceita um argumento de warmup e nem é possível alterar esse atributo num objeto da classe stanfit, via @\n\n\n\nEm estatística Bayesiana, o objeto de toda inferência é a distribuição posteriori. Em particular estamos interessados em resumos essa distribuição, como esperança, mediana, desvio padrão. Outro resumo interessante é o interv\n\n\n\n\nGelman, Andrew. 2017. «Burn-in vs. warm-up for iterative simulation algorithms». 2017. https://statmodeling.stat.columbia.edu/2017/12/15/burn-vs-warm-iterative-simulation-algorithms/.\n\n\nMcElreath, Richard. 2020. Statistical Rethinking: A Bayesian Course with Examples in R and Stan. 2.ª ed. CRC Press. https://www.amazon.com.br/Statistical-Rethinking-Bayesian-Course-Examples/dp/036713991X.\n\n\nStan Development Team. 2020. Stan Reference Manual: HMC Algorithm Parameters. https://mc-stan.org/docs/2_23/reference-manual/hmc-algorithm-parameters.html.\n\n\nStan Forums. 2020. «How does Stan work during warm up? Stan warm up algorithm? Stan burn in algorithm?» 2020. https://discourse.mc-stan.org/t/how-does-stan-work-during-warm-up-stan-warm-up-algorithm-stan-burn-in-algorithm/19690.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Estrutura básica de um arquivo stan</span>"
+    ]
+  },
+  {
+    "objectID": "models.html",
+    "href": "models.html",
+    "title": "3  Alguns modelos",
+    "section": "",
+    "text": "3.1 GLM com efeito aleatório",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Alguns modelos</span>"
+    ]
+  },
+  {
+    "objectID": "models.html#análise-fatorial",
+    "href": "models.html#análise-fatorial",
+    "title": "3  Alguns modelos",
+    "section": "3.2 Análise fatorial",
+    "text": "3.2 Análise fatorial",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Alguns modelos</span>"
+    ]
+  },
+  {
+    "objectID": "models.html#análise-de-sobrevivência",
+    "href": "models.html#análise-de-sobrevivência",
+    "title": "3  Alguns modelos",
+    "section": "3.3 Análise de sobrevivência",
+    "text": "3.3 Análise de sobrevivência\n\n\n\n\nGelman, Andrew. 2017. «Burn-in vs. warm-up for iterative simulation algorithms». 2017. https://statmodeling.stat.columbia.edu/2017/12/15/burn-vs-warm-iterative-simulation-algorithms/.\n\n\nMcElreath, Richard. 2020. Statistical Rethinking: A Bayesian Course with Examples in R and Stan. 2.ª ed. CRC Press. https://www.amazon.com.br/Statistical-Rethinking-Bayesian-Course-Examples/dp/036713991X.\n\n\nStan Development Team. 2020. Stan Reference Manual: HMC Algorithm Parameters. https://mc-stan.org/docs/2_23/reference-manual/hmc-algorithm-parameters.html.\n\n\nStan Forums. 2020. «How does Stan work during warm up? Stan warm up algorithm? Stan burn in algorithm?» 2020. https://discourse.mc-stan.org/t/how-does-stan-work-during-warm-up-stan-warm-up-algorithm-stan-burn-in-algorithm/19690.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Alguns modelos</span>"
     ]
   }
 ]

@@ -1,0 +1,9 @@
+---
+title: "Alguns modelos"
+---
+
+## GLM com efeito aleatório
+
+## Análise fatorial
+
+## Análise de sobrevivência
