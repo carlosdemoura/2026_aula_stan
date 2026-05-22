@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Carlos">
+<meta name="author" content="Carlos de Moura">
 
 <title>Aula sobre STAN</title>
 <style>
@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -118,7 +138,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Aula sobre STAN</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introdução</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -146,13 +166,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Aula sobre STAN</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introdução</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um arquivo stan</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Alguns modelos</span></span></a>
   </div>
 </li>
     </ul>
@@ -167,6 +193,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#sobre" id="toc-sobre" class="nav-link active" data-scroll-target="#sobre">Sobre</a></li>
   <li><a href="#setup-do-ambiente" id="toc-setup-do-ambiente" class="nav-link" data-scroll-target="#setup-do-ambiente">Setup do ambiente</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
   </ul>
 </nav>
     </div>
@@ -185,14 +212,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Autor</div>
     <div class="quarto-title-meta-contents">
-             <p>Carlos </p>
+             <p>Carlos de Moura </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">31 de dezembro de 2025</p>
+      <p class="date">27 de maio de 2026</p>
     </div>
   </div>
   
@@ -204,11 +231,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="sobre" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="sobre">Sobre</h2>
 <div style="text-align: right">
 <p>“Nunca ouviste passar o vento.<br> O vento só fala do vento.<br> O que lhe ouviste foi mentira,<br> E a mentira está em ti.<br> Pessoa</p>
 </div>
+<section id="sobre" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="sobre">Sobre</h2>
 <p>Este é o <a href="https://github.com/carlosdemoura/2026_aula_stan_dani">material auxiliar</a> da apresentação sobre STAN para a turma de Inferência Bayesiana (DCC/DEST-UFMG, 2026/1).</p>
 </section>
 <section id="setup-do-ambiente" class="level2 unnumbered">
@@ -219,6 +246,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"tidyverse"</span>, <span class="st">"rstan"</span>, <span class="st">"coda"</span>, <span class="st">"deldir"</span>, <span class="st">"posterior"</span>, <span class="st">"shinystan"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setdiff</span>(<span class="fu">installed.packages</span>()[,<span class="st">"Package"</span>]) <span class="sc">|&gt;</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  pak<span class="sc">::</span><span class="fu">pak</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="referências" class="level1 unnumbered">
+<h1 class="unnumbered">Referências</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-gelman_burnin" class="csl-entry" role="listitem">
+Gelman, Andrew. 2017. <span>“Burn-in Vs. Warm-up for Iterative
+Simulation Algorithms.”</span> 2017. <a href="https://statmodeling.stat.columbia.edu/2017/12/15/burn-vs-warm-iterative-simulation-algorithms/">https://statmodeling.stat.columbia.edu/2017/12/15/burn-vs-warm-iterative-simulation-algorithms/</a>.
+</div>
+<div id="ref-mcelreath" class="csl-entry" role="listitem">
+McElreath, Richard. 2020. <em>Statistical Rethinking: A Bayesian Course
+with Examples in r and Stan</em>. 2nd ed. CRC Press. <a href="https://www.amazon.com.br/Statistical-Rethinking-Bayesian-Course-Examples/dp/036713991X">https://www.amazon.com.br/Statistical-Rethinking-Bayesian-Course-Examples/dp/036713991X</a>.
+</div>
+<div id="ref-stan_reference_manual" class="csl-entry" role="listitem">
+Stan Development Team. 2020. <em>Stan Reference Manual: HMC Algorithm
+Parameters</em>. <a href="https://mc-stan.org/docs/2_23/reference-manual/hmc-algorithm-parameters.html">https://mc-stan.org/docs/2_23/reference-manual/hmc-algorithm-parameters.html</a>.
+</div>
+<div id="ref-stan_forum_warmup" class="csl-entry" role="listitem">
+Stan Forums. 2020. <span>“How Does Stan Work During Warm up? Stan Warm
+up Algorithm? Stan Burn in Algorithm?”</span> 2020. <a href="https://discourse.mc-stan.org/t/how-does-stan-work-during-warm-up-stan-warm-up-algorithm-stan-burn-in-algorithm/19690">https://discourse.mc-stan.org/t/how-does-stan-work-during-warm-up-stan-warm-up-algorithm-stan-burn-in-algorithm/19690</a>.
+</div>
 </div>
 
 
