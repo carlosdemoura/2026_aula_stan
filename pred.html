@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; Estrutura básica de um arquivo stan – Aula sobre STAN</title>
+<title>4&nbsp; Sobre predições – Aula sobre STAN</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,41 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -85,8 +50,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./models.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./models.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -126,35 +90,6 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -167,7 +102,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./basics.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um arquivo stan</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./pred.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sobre predições</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -200,7 +135,7 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./basics.html" class="sidebar-item-text sidebar-link active">
+  <a href="./basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um arquivo stan</span></span></a>
   </div>
 </li>
@@ -212,7 +147,7 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pred.html" class="sidebar-item-text sidebar-link">
+  <a href="./pred.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sobre predições</span></span></a>
   </div>
 </li>
@@ -226,19 +161,7 @@ window.Quarto = {
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#sobre-o-stan" id="toc-sobre-o-stan" class="nav-link active" data-scroll-target="#sobre-o-stan"><span class="header-section-number">2.1</span> Sobre o STAN</a>
-  <ul class="collapse">
-  <li><a href="#compilação-vs.-estimação" id="toc-compilação-vs.-estimação" class="nav-link" data-scroll-target="#compilação-vs.-estimação">Compilação vs.&nbsp;estimação</a></li>
-  </ul></li>
-  <li><a href="#blocos" id="toc-blocos" class="nav-link" data-scroll-target="#blocos"><span class="header-section-number">2.2</span> Blocos</a>
-  <ul class="collapse">
-  <li><a href="#bloco-data" id="toc-bloco-data" class="nav-link" data-scroll-target="#bloco-data">Bloco data</a></li>
-  <li><a href="#bloco-parameters-transformed-parameters" id="toc-bloco-parameters-transformed-parameters" class="nav-link" data-scroll-target="#bloco-parameters-transformed-parameters">Bloco parameters &amp; transformed parameters</a></li>
-  <li><a href="#bloco-model" id="toc-bloco-model" class="nav-link" data-scroll-target="#bloco-model">Bloco model</a></li>
-  <li><a href="#bloco-functions" id="toc-bloco-functions" class="nav-link" data-scroll-target="#bloco-functions">Bloco functions</a></li>
-  </ul></li>
-  <li><a href="#argumentos-importantes" id="toc-argumentos-importantes" class="nav-link" data-scroll-target="#argumentos-importantes"><span class="header-section-number">2.3</span> Argumentos importantes</a></li>
-  <li><a href="#extraindo-e-analisando-a-amostra" id="toc-extraindo-e-analisando-a-amostra" class="nav-link" data-scroll-target="#extraindo-e-analisando-a-amostra"><span class="header-section-number">2.4</span> Extraindo e analisando a amostra</a></li>
+  <li><a href="#predições-no-stan" id="toc-predições-no-stan" class="nav-link active" data-scroll-target="#predições-no-stan"><span class="header-section-number">4.1</span> Predições no STAN</a></li>
   </ul>
 </nav>
     </div>
@@ -247,7 +170,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um arquivo stan</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sobre predições</span></h1>
 </div>
 
 
@@ -264,118 +187,12 @@ window.Quarto = {
 </header>
 
 
-<section id="sobre-o-stan" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="sobre-o-stan"><span class="header-section-number">2.1</span> Sobre o STAN</h2>
-<p>O STAN é um software que usa uma sintaxe própria para implementar seu algoritmo de amostragem MCMC. Por conta disso é comum que se diga que STAN é também uma linguagem de programação. Como o STAN foi escrito em C++, a sintaxe que ele requer para a escrita dos scripts tem muitas similaridades com a dessa linguagem, mas também incorpora certos elementos de linguagens interpretadas como o R. Esse é o caso de estruturas como condições, laços e alguns operadores (como soma e multiplicação matriciais).</p>
-<p>A principal diferença entre a sintaxe STAN e a de linguagens interpretadas é a tipagem. Como os algoritmos podem ser pesados</p>
-<section id="compilação-vs.-estimação" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="compilação-vs.-estimação">Compilação vs.&nbsp;estimação</h3>
-<p>O uso do STAN pode ser dividido em duas etapas: compilação do modelo e construção da cadeia. Uma vez que o modelo está bem especificado (e o script STAN está pronto), é necessário compilar esse código em um arquivo executável (é esse arquivo que tomará amostras de uma cadeia MCMC). Note que</p>
-</section>
-</section>
-<section id="blocos" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="blocos"><span class="header-section-number">2.2</span> Blocos</h2>
-<p>Um modelo bayesiano está bem especificado se estão bem definidos os seguintes elementos:</p>
-<ul>
-<li>espaço paramétrico</li>
-<li>espaço amostral</li>
-<li>verossimilhança (ou a distribuição dos dados condicionados aos parâmetros)</li>
-<li>distribuições prioris dos parâmetros</li>
-</ul>
-<section id="bloco-data" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="bloco-data">Bloco data</h3>
-</section>
-<section id="bloco-parameters-transformed-parameters" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="bloco-parameters-transformed-parameters">Bloco parameters &amp; transformed parameters</h3>
-<p>Todas as variáveis especificadas nesse bloco devem obrigatoriamente</p>
-</section>
-<section id="bloco-model" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="bloco-model">Bloco model</h3>
-</section>
-<section id="bloco-functions" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="bloco-functions">Bloco functions</h3>
-</section>
-</section>
-<section id="argumentos-importantes" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="argumentos-importantes"><span class="header-section-number">2.3</span> Argumentos importantes</h2>
-<p>O help pode ser acessado via <code>?rstan::sampling</code> ou <code>?rstan::stan</code></p>
-<ul>
-<li><code>chains</code>: o número de cadeias que se deseja rodar</li>
-<li><code>init</code>: aqui ficam armazenados os valores do chute inicial das cadeias. Esse argumento deve ser obrigatoriamente uma lista de listas em que, no primeiro nível, fica a cadeia e, no segundo nível, uma lista nomeada com os parâmetros especificados no <code>.stan</code> e cujos valores são o chute inicial da cadeia. Note que deve sempre valer <code>length(init) == chains</code>. No exemplo abaixo, o modelo tem dois parâmetros (<span class="math inline">\(\alpha\)</span> e <span class="math inline">\(\beta\)</span>) e na primeira cadeia o chute inicial é <span class="math inline">\(\alpha_0 = 2, \beta_0=3\)</span> enquanto na segunda cadeia é <span class="math inline">\(\alpha_0 = -1, \beta_0=0\)</span>.</li>
-</ul>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>init <span class="ot">=</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">2</span>, <span class="at">beta =</span> <span class="dv">3</span>),</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">alpha =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">beta =</span> <span class="dv">0</span>),</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="st">"random"</span>),</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="dv">0</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Dica</span>Sobre chutes iniciais
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Caso o usuário não especifique um chute incial, o algoritmo do STAN tenta escolher valores segundo a seguinte regra</p>
-<p>Caso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, em geral está associado a um modelo mal especifico ou a erros na escrita o script <code>.stan</code>.</p>
-</div>
-</div>
-</div>
-<ul>
-<li><code>iter</code>: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).</li>
-<li><code>warmup</code>: o número de iterações que serão excluídas, por default o STAN escolhe o warmup como sendo igual a metade das iterações.</li>
-</ul>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Conversando na torre de Babel
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), <code>warmup</code> e <code>iter</code> podem ter significados diferentes dos do rstan. É possível que <code>iter</code> signifique o número de amostras que o programa vai tomar após o <code>warmup</code>, então o total de iterações é dado por <code>warmup</code> + <code>iter</code>. No caso do rstan o total de iterações é <code>iter</code> - e, nesse caso, o tamanho da amostra da posteriori é <code>iter</code> - <code>warmup</code>.</p>
-</div>
-</div>
-</div>
-<ul>
-<li><code>cores</code>: .</li>
-<li><code>data</code>:</li>
-<li><code>pars</code>:</li>
-<li><code>seed</code>:</li>
-</ul>
-</section>
-<section id="extraindo-e-analisando-a-amostra" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="extraindo-e-analisando-a-amostra"><span class="header-section-number">2.4</span> Extraindo e analisando a amostra</h2>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Cuidado</span>Porque não é uma boa ideia diminuir o tamanho do warmup?
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>É comum que</p>
-<p>Essa filosofia é tão forte no pacote que não é possível alterar o valor do warmup uma vez que a amostragem foi feita. Assim, a função <code>rstan::extract</code> não aceita um argumento de warmup e nem é possível alterar esse atributo num objeto da classe <code>stanfit</code>, via <code>@</code></p>
-</div>
-</div>
-</div>
-<p>Em estatística Bayesiana, o objeto de toda inferência é a distribuição posteriori. Em particular estamos interessados em resumos essa distribuição, como esperança, mediana, desvio padrão. Outro resumo interessante é o interv</p>
+<section id="predições-no-stan" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="predições-no-stan"><span class="header-section-number">4.1</span> Predições no STAN</h2>
+<blockquote class="blockquote">
+<p>“Rethinking: Generative thinking, Bayesian inference. Bayesian models are generative, meaning they can be used to simulate observations just as well as they can be used to estimate parameters. One benefit of this fact is that a statistical model can be developed by thinking hard about how the data might have arisen.”</p>
+<p>— Richard McElreath, <em>Statistical Rethinking: A Bayesian Course with Examples in R and Stan</em> (2020)</p>
+</blockquote>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
@@ -797,14 +614,11 @@ Stan Forums. 2020. <span>«How does Stan work during warm up? Stan warm up algor
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Introdução">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introdução</span></span>
+      <a href="./models.html" class="pagination-link" aria-label="Alguns modelos">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Alguns modelos</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./models.html" class="pagination-link" aria-label="Alguns modelos">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Alguns modelos</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
