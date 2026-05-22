@@ -4,19 +4,9 @@
     "href": "index.html",
     "title": "Aula sobre STAN",
     "section": "",
-    "text": "Sobre\nEste é o material auxiliar da apresentação sobre STAN para a turma de Inferência Bayesiana (DCC/DEST-UFMG, 2026/1).",
+    "text": "Sobre\nEste é o material auxiliar da apresentação sobre STAN para a turma de Inferência Bayesiana (DCC/DEST-UFMG, 2026/1). Feito em Quarto e R!",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introdução</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#sobre",
-    "href": "index.html#sobre",
-    "title": "Aula sobre STAN",
-    "section": "",
-    "text": "“Nunca ouviste passar o vento. O vento só fala do vento. O que lhe ouviste foi mentira, E a mentira está em ti. Pessoa",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Aula sobre STAN</span>"
     ]
   },
   {
@@ -64,7 +54,7 @@
     "href": "basics.html#argumentos-importantes",
     "title": "2  Estrutura básica de um arquivo stan",
     "section": "2.3 Argumentos importantes",
-    "text": "2.3 Argumentos importantes\nO help pode ser acessado via ?rstan::sampling ou ?rstan::stan\n\nchains: o número de cadeias que se deseja rodar\ninit: aqui ficam armazenados os valores do chute inicial das cadeias. Esse argumento deve ser obrigatoriamente uma lista de listas em que, no primeiro nível, fica a cadeia e, no segundo nível, uma lista nomeada com os parâmetros especificados no .stan e cujos valores são o chute inicial da cadeia. Note que deve sempre valer length(init) == chains. No exemplo abaixo, o modelo tem dois parâmetros (\\(\\alpha\\) e \\(\\beta\\)) e na primeira cadeia o chute inicial é \\(\\alpha_0 = 2, \\beta_0=3\\) enquanto na segunda cadeia é \\(\\alpha_0 = -1, \\beta_0=0\\).\n\n\ninit =\n  list(\n    list(alpha = 2, beta = 3),\n    list(alpha = -1, beta = 0),\n    list(\"random\"),\n    list(0)\n  )\n\n\n\n\n\n\n\nDicaSobre chutes iniciais\n\n\n\nCaso o usuário não especifique um chute incial, o algoritmo do STAN tenta escolher valores segundo a seguinte regra\nCaso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, em geral está associado a um modelo mal especifico ou a erros na escrita o script .stan.\n\n\n\niter: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).\nwarmup: o número de iterações que serão excluídas, por default o STAN escolhe o warmup como sendo igual a metade das iterações.\n\n\n\n\n\n\n\nNotaConversando na torre de Babel\n\n\n\nEm alguns softwares de estimação de distribuições (inclusive o CMDSTAN), warmup e iter podem ter significados diferentes dos do rstan. É possível que iter signifique o número de amostras que o programa vai tomar após o warmup, então o total de iterações é dado por warmup + iter. No caso do rstan o total de iterações é iter - e, nesse caso, o tamanho da amostra da posteriori é iter - warmup.\n\n\n\ncores: .\ndata:\npars:\nseed:",
+    "text": "2.3 Argumentos importantes\nO help pode ser acessado via ?rstan::sampling ou ?rstan::stan\n\nchains: o número de cadeias que se deseja rodar\ninit: aqui ficam armazenados os valores do chute inicial das cadeias. Esse argumento deve ser obrigatoriamente uma lista de listas em que, no primeiro nível, fica a cadeia e, no segundo nível, uma lista nomeada com os parâmetros especificados no .stan e cujos valores são o chute inicial da cadeia. Note que deve sempre valer length(init) == chains. No exemplo abaixo, o modelo tem dois parâmetros (\\(\\alpha\\) e \\(\\beta\\)) e na primeira cadeia o chute inicial é \\(\\alpha_0 = 2, \\beta_0=3\\) enquanto na segunda cadeia é \\(\\alpha_0 = -1, \\beta_0=0\\).\n\n\ninit =\n  list(\n    list(alpha = 2, beta = 3),\n    list(alpha = -1, beta = 0),\n    list(\"random\"),\n    list(0)\n  )\n\n\n\n\n\n\n\nDicaSobre chutes iniciais\n\n\n\n\n\nCaso o usuário não especifique um chute incial, o algoritmo do STAN tenta escolher valores segundo a seguinte regra\nCaso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, em geral está associado a um modelo mal especifico ou a erros na escrita o script .stan.\n\n\n\n\niter: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).\nwarmup: o número de iterações que serão excluídas, por default o STAN escolhe o warmup como sendo igual a metade das iterações.\n\n\n\n\n\n\n\nNotaConversando na torre de Babel\n\n\n\n\n\nEm alguns softwares de estimação de distribuições (inclusive o CMDSTAN), warmup e iter podem ter significados diferentes dos do rstan. É possível que iter signifique o número de amostras que o programa vai tomar após o warmup, então o total de iterações é dado por warmup + iter. No caso do rstan o total de iterações é iter - e, nesse caso, o tamanho da amostra da posteriori é iter - warmup.\n\n\n\n\ncores: .\ndata:\npars:\nseed:",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Estrutura básica de um arquivo stan</span>"
     ]
@@ -107,6 +97,26 @@
     "text": "3.3 Análise de sobrevivência\n\n\n\n\nGelman, Andrew. 2017. «Burn-in vs. warm-up for iterative simulation algorithms». 2017. https://statmodeling.stat.columbia.edu/2017/12/15/burn-vs-warm-iterative-simulation-algorithms/.\n\n\nMcElreath, Richard. 2020. Statistical Rethinking: A Bayesian Course with Examples in R and Stan. 2.ª ed. CRC Press. https://www.amazon.com.br/Statistical-Rethinking-Bayesian-Course-Examples/dp/036713991X.\n\n\nStan Development Team. 2020. Stan Reference Manual: HMC Algorithm Parameters. https://mc-stan.org/docs/2_23/reference-manual/hmc-algorithm-parameters.html.\n\n\nStan Forums. 2020. «How does Stan work during warm up? Stan warm up algorithm? Stan burn in algorithm?» 2020. https://discourse.mc-stan.org/t/how-does-stan-work-during-warm-up-stan-warm-up-algorithm-stan-burn-in-algorithm/19690.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Alguns modelos</span>"
+    ]
+  },
+  {
+    "objectID": "pred.html",
+    "href": "pred.html",
+    "title": "4  Sobre predições",
+    "section": "",
+    "text": "4.1 Predições no STAN",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Sobre predições</span>"
+    ]
+  },
+  {
+    "objectID": "pred.html#predições-no-stan",
+    "href": "pred.html#predições-no-stan",
+    "title": "4  Sobre predições",
+    "section": "",
+    "text": "“Rethinking: Generative thinking, Bayesian inference. Bayesian models are generative, meaning they can be used to simulate observations just as well as they can be used to estimate parameters. One benefit of this fact is that a statistical model can be developed by thinking hard about how the data might have arisen.”\n— Richard McElreath, Statistical Rethinking: A Bayesian Course with Examples in R and Stan (2020)\n\n\n\n\n\nGelman, Andrew. 2017. «Burn-in vs. warm-up for iterative simulation algorithms». 2017. https://statmodeling.stat.columbia.edu/2017/12/15/burn-vs-warm-iterative-simulation-algorithms/.\n\n\nMcElreath, Richard. 2020. Statistical Rethinking: A Bayesian Course with Examples in R and Stan. 2.ª ed. CRC Press. https://www.amazon.com.br/Statistical-Rethinking-Bayesian-Course-Examples/dp/036713991X.\n\n\nStan Development Team. 2020. Stan Reference Manual: HMC Algorithm Parameters. https://mc-stan.org/docs/2_23/reference-manual/hmc-algorithm-parameters.html.\n\n\nStan Forums. 2020. «How does Stan work during warm up? Stan warm up algorithm? Stan burn in algorithm?» 2020. https://discourse.mc-stan.org/t/how-does-stan-work-during-warm-up-stan-warm-up-algorithm-stan-burn-in-algorithm/19690.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Sobre predições</span>"
     ]
   }
 ]

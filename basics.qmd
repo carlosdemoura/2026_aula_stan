@@ -53,7 +53,7 @@ init =
   )
 ```
 
-::: {.callout-tip}
+::: {.callout-tip collapse="true"}
 
 #### Sobre chutes iniciais 
 
@@ -65,7 +65,7 @@ Caso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, 
 * `iter`: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).
 * `warmup`: o número de iterações que serão excluídas, por default o STAN escolhe o warmup como sendo igual a metade das iterações.
 
-::: {.callout-note}
+::: {.callout-note collapse="true"}
 #### Conversando na torre de Babel
 
 Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), `warmup` e `iter` podem ter significados diferentes dos do rstan. É possível que `iter` signifique o número de amostras que o programa vai tomar após o `warmup`, então o total de iterações é dado por `warmup` + `iter`. No caso do rstan o total de iterações é `iter` - e, nesse caso, o tamanho da amostra da posteriori é `iter` - `warmup`.
