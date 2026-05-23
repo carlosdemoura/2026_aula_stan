@@ -68,7 +68,7 @@ X
 
 ```{r}
 #| code-fold: true
-data =
+data_GLM =
   list(
     n = nrow(X),
     p = ncol(X),
@@ -105,15 +105,107 @@ model {
 
 ```{r}
 #| eval: false
-fit_GLM = rstan::sampling(mod_GLM, data = data)
+fit_GLM = rstan::sampling(mod_GLM, data = data_GLM)
+
+# shinystan::launch_shinystan(fit_GLM)
 ```
 
 ```{r}
 #| echo: false
-out = capture.output({fit_GLM = rstan::sampling(mod_GLM, data = data)})
+out = capture.output({fit_GLM = rstan::sampling(mod_GLM, data = data_GLM)})
 cat(out[1:15], sep="\n")
 ```
 
+### Offset e comparações múltiplas
+
+```{r}
+danishlc = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/danishlc.csv"), sep =",")
+```
+
+```stan
+generated quantities {
+  real Horsens_vs_Kolding;
+  real Horsens_vs_Vejle;
+  real Kolding_vs_Vejle;
+
+  Horsens_vs_Kolding = beta[2] - beta[3];
+  Horsens_vs_Vejle   = beta[2] - beta[4];
+  Kolding_vs_Vejle   = beta[3] - beta[4];
+}
+```
+
+
+```{r}
+#| echo: false
+danishlc |>
+  select() |>
+  knitr::kable()
+```
+
+```{r}
+#| code-fold: true
+
+X = model.matrix(Cases ~ 0+City + Age, data = danishlc)
+attr(X,"assign") = attr(X,"contrasts") = NULL
+
+data_GLM2 =
+  list(
+    n = nrow(X),
+    p = ncol(X),
+    X = X,
+    Y = danishlc$Cases,
+    offset = danishlc$Pop
+  )
+
+mod_GLM2 = stan_model(model_name = "GLM2", model_code = "
+data {
+  int<lower=1> n;
+  int<lower=1> p;
+  matrix[n, p] X;
+  int<lower=0> Y[n];
+  vector[n] offset;
+}
+parameters {
+  vector[p] beta;
+}
+transformed parameters {
+  vector[n] eta;
+  eta = X * beta;
+}
+model {
+  for (i in 1:n) {
+    Y[i] ~ poisson(offset[i] + exp(eta[i]));
+  }
+  for (k in 1:p) {
+    beta[k] ~ normal(0,10);
+  }
+}
+generated quantities {
+  real Horsens_vs_Kolding;
+  real Horsens_vs_Vejle;
+  real Kolding_vs_Vejle;
+
+  Horsens_vs_Kolding = beta[1] - beta[2];
+  Horsens_vs_Vejle   = beta[1] - beta[3];
+  Kolding_vs_Vejle   = beta[2] - beta[3];
+}
+
+")
+```
+
+
+```{r}
+#| eval: false
+fit_GLM2 = rstan::sampling(mod_GLM2, data = data_GLM2)
+
+# shinystan::launch_shinystan(fit_GLM2)
+```
+
+```{r}
+#| echo: false
+out = capture.output({fit_GLM2 = rstan::sampling(mod_GLM2, data = data_GLM2)})
+cat(out[1:15], sep="\n")
+```
 
 ## Análise fatorial
 
