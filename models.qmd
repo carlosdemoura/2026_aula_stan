@@ -24,7 +24,7 @@ Kline = read.csv(url("https://raw.githubusercontent.com/rmcelreath/rethinking/re
 ```{r}
 #| echo: false
 Kline |>
-  knitr::kable()
+  knitr::kable(align="c")
 ```
 
 
@@ -101,6 +101,8 @@ model {
 }
 
 ")
+
+# saveRDS(mod_GLM, "stuff/mod_GLM.rds", compress = "xz")
 ```
 
 
@@ -146,8 +148,9 @@ generated quantities {
 ```{r}
 #| echo: false
 danishlc |>
-  select() |>
-  knitr::kable()
+  select(City, Pop, Age, Cases) |>
+  head(10) |>
+  knitr::kable(align="c")
 ```
 
 ```{r}
@@ -200,6 +203,8 @@ generated quantities {
 }
 
 ")
+
+# saveRDS(mod_GLM2, "stuff/mod_GLM2.rds", compress = "xz")
 ```
 
 
@@ -231,7 +236,209 @@ out = capture.output({fit_GLM2 = rstan::sampling(mod_GLM2, data = data_GLM2)})
 plot(fit_GLM2, pars = "beta", ci_level = 0.95)
 ```
 
-## Análise fatorial
-
 ## Análise de sobrevivência
+```{r}
+isoladores = read.csv(url("https://github.com/carlosdemoura/2026_aula_stan_dani/raw/refs/heads/main/stuff/isoladores.csv"))
+```
 
+```{r}
+#| echo: false
+#| eval: false
+isoladores =
+  isoladores |>
+  mutate(
+    tempo = tempo/max(tempo)
+  )
+```
+
+
+```{r}
+#| echo: false
+head(isoladores, 5) |>
+  knitr::kable(align="c")
+```
+
+```{r}
+survfit(Surv(tempo, evento)~1, data = isoladores) |>
+  plot(mark.time=T)
+```
+```stan
+data {
+  int<lower=1> n;
+  vector[n] tempo;
+  int<lower=0,upper=1> evento[n];
+  int<lower=1> m;
+}
+parameters {
+  real<lower=0> alpha;
+  real<lower=0> sigma;
+}
+model {
+  alpha ~ gamma(0.1, 0.1);
+  sigma ~ gamma(0.1,0.1);
+  for (i in 1:n) {
+    if (evento[i] == 1) {
+      target += weibull_lpdf(tempo[i] | alpha, sigma);
+    } else {
+      target += weibull_lccdf(tempo[i] | alpha, sigma);
+    }
+  }
+}
+generated quantities {
+  vector[m] t_grid;
+  vector[m] S;
+  real t_max = max(tempo);
+  for (j in 1:m) {
+    t_grid[j] = (j - 1) * t_max / (m - 1);
+    S[j] = exp(  -pow(t_grid[j] / sigma, alpha)  );
+  }
+}
+```
+
+
+```{r}
+#| code-fold: true
+#| eval: false
+data_surv =
+  list(
+    tempo  = isoladores$tempo,
+    evento = isoladores$evento,
+    n = nrow(isoladores),
+    m = 100
+  )
+
+mod_surv_weib = stan_model(model_name = "surv_weib", model_code = "
+data {
+  int<lower=1> n;
+  vector[n] tempo;
+  int<lower=0,upper=1> evento[n];
+  int<lower=1> m;
+}
+parameters {
+  real<lower=0> alpha;
+  real<lower=0> sigma;
+}
+model {
+  alpha ~ gamma(0.1, 0.1);
+  sigma ~ gamma(0.1,0.1);
+  for (i in 1:n) {
+    if (evento[i] == 1) {
+      target += weibull_lpdf(tempo[i] | alpha, sigma);
+    } else {
+      target += weibull_lccdf(tempo[i] | alpha, sigma);
+    }
+  }
+}
+generated quantities {
+  vector[m] t_grid;
+  vector[m] S;
+  real t_max = max(tempo);
+  for (j in 1:m) {
+    t_grid[j] = (j - 1) * t_max / (m - 1);
+    S[j] = exp(  -pow(t_grid[j] / sigma, alpha)  );
+  }
+}
+
+")
+
+# saveRDS(mod_surv_weib, "stuff/mod_surv_weib.rds", compress = "xz")
+```
+
+```{r}
+#| eval: false
+fit_surv_weib = rstan::sampling(mod_surv_weib, data = data_surv, pars = c("alpha", "sigma", "S"))
+```
+
+```{r}
+#| echo: false
+data_surv =
+  list(
+    tempo  = isoladores$tempo,
+    evento = isoladores$evento,
+    n = nrow(isoladores),
+    m = 100
+  )
+
+mod_surv_weib = readRDS("stuff/mod_surv_weib.rds")
+out = capture.output({fit_surv_weib = rstan::sampling(mod_surv_weib, data = data_surv, pars = c("alpha", "sigma", "S"))
+})
+```
+
+```{r}
+post = rstan::extract(fit_surv_weib)
+
+lapply(post, dim)
+```
+
+
+```{r}
+for (par in c("alpha", "sigma", "lp__")) {
+  post[[par]] = matrix(post[[par]])
+}
+lapply(post, dim)
+```
+
+
+```{r}
+resumo = list()
+
+for ( parameter in names(post) ) {
+    hpd_temp = apply( post[parameter][[1]], 2,
+                      function(x) {
+                        coda::HPDinterval(coda::as.mcmc(x))[,c("lower", "upper")] |>
+                          as.numeric()
+                      })
+
+    resumo[[parameter]] = list(
+      "media"   = apply( post[parameter][[1]], 2, mean          )                   ,
+      "mediana" = apply( post[parameter][[1]], 2, stats::median )                   ,
+      "hpd_min" = apply( hpd_temp, 2, function(x) { unlist(x) |> purrr::pluck(1) }) ,
+      "hpd_max" = apply( hpd_temp, 2, function(x) { unlist(x) |> purrr::pluck(2) })
+    )
+}
+
+resumo = sapply(resumo, function(x) { abind::abind(x, along = 2) })
+
+lapply(resumo, head)
+```
+
+
+```{r}
+#| code-fold: true
+
+df_fit =
+  resumo$S |>
+  cbind("tempo" = seq(0, max(isoladores$tempo), length.out = 100)) |>
+  as.data.frame()
+
+km =
+  survfit(
+    Surv(tempo, evento) ~ 1,
+    data = isoladores
+  ) |>
+  broom::tidy()
+
+ggplot(df_fit, aes(x = tempo, y = media)) +
+  geom_ribbon(aes(ymin = hpd_min, ymax = hpd_max), alpha = 0.3) +
+  geom_line(linewidth = 1) +
+  geom_step(
+    data = km,
+    aes(x = time, y = estimate),
+    color = "red",
+    linewidth = 1,
+    inherit.aes = FALSE
+  ) +
+  labs(x = "Tempo", y = "S(t)"
+  ) +
+  theme_minimal()
+```
+
+::: {.callout-important}
+#### Não tranque sua matrícula
+
+Para não desistir da inferência Bayesiana, refaça a análise acima padronizando os tempos pelo tempo máximo.
+:::
+
+
+
+## Análise fatorial

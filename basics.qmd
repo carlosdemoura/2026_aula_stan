@@ -79,7 +79,7 @@ Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), `wa
 ## Extraindo e analisando a amostra
 
 ::: {.callout-caution collapse="true"}
-### Porque não é uma boa ideia diminuir o tamanho do warmup?
+### Porque não é uma boa ideia diminuir o warmup?
 
 É comum que
 
