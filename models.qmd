@@ -8,7 +8,7 @@ title: "Alguns modelos"
 library(tidyverse)
 library(rstan)
 library(coda)
-library(deldir)
+library(survival)
 library(posterior)
 library(shinystan)
 ```
@@ -68,6 +68,7 @@ X
 
 ```{r}
 #| code-fold: true
+#| eval: false
 data_GLM =
   list(
     n = nrow(X),
@@ -112,8 +113,15 @@ fit_GLM = rstan::sampling(mod_GLM, data = data_GLM)
 
 ```{r}
 #| echo: false
+data_GLM =
+  list(
+    n = nrow(X),
+    p = ncol(X),
+    X = X,
+    Y = Kline$total_tools
+  )
+mod_GLM = readRDS("stuff/mod_GLM.rds")
 out = capture.output({fit_GLM = rstan::sampling(mod_GLM, data = data_GLM)})
-cat(out[1:15], sep="\n")
 ```
 
 ### Offset e comparações múltiplas
@@ -144,6 +152,7 @@ danishlc |>
 
 ```{r}
 #| code-fold: true
+#| eval: false
 
 X = model.matrix(Cases ~ 0+City + Age, data = danishlc)
 attr(X,"assign") = attr(X,"contrasts") = NULL
@@ -197,16 +206,32 @@ generated quantities {
 ```{r}
 #| eval: false
 fit_GLM2 = rstan::sampling(mod_GLM2, data = data_GLM2)
-
-# shinystan::launch_shinystan(fit_GLM2)
 ```
 
 ```{r}
 #| echo: false
+
+X = model.matrix(Cases ~ 0+City + Age, data = danishlc)
+attr(X,"assign") = attr(X,"contrasts") = NULL
+
+data_GLM2 =
+  list(
+    n = nrow(X),
+    p = ncol(X),
+    X = X,
+    Y = danishlc$Cases,
+    offset = danishlc$Pop
+  )
+
+mod_GLM2 = readRDS("stuff/mod_GLM2.rds")
 out = capture.output({fit_GLM2 = rstan::sampling(mod_GLM2, data = data_GLM2)})
-cat(out[1:15], sep="\n")
+```
+
+```{r}
+plot(fit_GLM2, pars = "beta", ci_level = 0.95)
 ```
 
 ## Análise fatorial
 
 ## Análise de sobrevivência
+
