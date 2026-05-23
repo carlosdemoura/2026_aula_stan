@@ -7,3 +7,5 @@ title: "Sobre predições"
 > “Rethinking: Generative thinking, Bayesian inference. Bayesian models are generative, meaning they can be used to simulate observations just as well as they can be used to estimate parameters. One benefit of this fact is that a statistical model can be developed by thinking hard about how the data might have arisen.”
 >
 > — Richard McElreath, *Statistical Rethinking: A Bayesian Course with Examples in R and Stan* (2020)
+
+Predições como parâmetro vs. generated quantites

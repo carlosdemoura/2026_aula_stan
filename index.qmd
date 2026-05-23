@@ -2,6 +2,17 @@
 title: "Introdução"
 ---
 
+```{r}
+#| include: false
+
+library(tidyverse)
+library(rstan)
+library(coda)
+library(deldir)
+library(posterior)
+library(shinystan)
+```
+
 ::: {style="text-align: right"}
 "Nunca ouviste passar o vento.<br>
 O vento só fala do vento.<br>
@@ -15,6 +26,7 @@ Pessoa
 Este é o [material auxiliar](https://github.com/carlosdemoura/2026_aula_stan_dani) da apresentação sobre STAN para a turma de Inferência Bayesiana (DCC/DEST-UFMG, 2026/1). Feito em [Quarto](https://quarto.org/) e R!
 
 ## Setup do ambiente {.unnumbered}
+
 
 ```{r}
 #| eval: false

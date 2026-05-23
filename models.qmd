@@ -2,7 +2,108 @@
 title: "Alguns modelos"
 ---
 
+```{r}
+#| include: false
+
+library(tidyverse)
+library(rstan)
+library(coda)
+library(deldir)
+library(posterior)
+library(shinystan)
+```
+
 ## GLM com efeito aleatório
+
+```{r}
+Kline = read.csv(url("https://raw.githubusercontent.com/rmcelreath/rethinking/refs/heads/master/data/Kline.csv"), sep =";") |>
+  arrange(contact)
+```
+
+
+```{r}
+#| echo: false
+Kline |>
+  knitr::kable()
+```
+
+
+```stan
+data {
+  int<lower=1> n;
+  int<lower=1> p;
+  matrix[n, p] X;
+  real Y;
+}
+parameters {
+  vector[p] beta;
+}
+transformed parameters {
+  vector[p] eta;
+  eta = X * beta;
+}
+model {
+  for (i in 1:n) {
+    Y[i] ~ poisson(eta[i]);
+  }
+  for (k in 1:p) {
+    beta[k] ~ normal(0,1);
+  }
+}
+```
+
+```{r}
+X = model.matrix(total_tools ~ contact * log(population), data = Kline)
+attr(X,"assign") = attr(X,"contrasts") = NULL
+X
+```
+
+
+```{r}
+data =
+  list(
+    n = nrow(X),
+    p = ncol(X),
+    X = X,
+    Y = Kline$total_tools
+  )
+```
+
+O modelo pode ser compilado abaixo ou baixado diretamente 
+```{r}
+#| eval: false
+#| code-fold: true
+
+mod = readRDS(url(""))
+
+# ou
+
+mod = stan_model(model_code = "
+data {
+  int<lower=1> n;
+  int<lower=1> p;
+  matrix[n, p] X;
+  int<lower=0> Y[n];
+}
+parameters {
+  vector[p] beta;
+}
+transformed parameters {
+  vector[p] eta;
+  eta = X * beta;
+}
+model {
+  for (i in 1:n) {
+    Y[i] ~ poisson(eta[i]);
+  }
+  for (k in 1:p) {
+    beta[k] ~ normal(0,1);
+  }
+}
+
+")
+```
+
 
 ## Análise fatorial
 

@@ -26,6 +26,6 @@ format:
     code-fold: false
 
 execute:
-  freeze: auto
+  freeze: false
   warning: false
   message: false
