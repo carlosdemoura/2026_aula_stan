@@ -442,3 +442,42 @@ Para não desistir da inferência Bayesiana, refaça a análise acima padronizan
 
 
 ## Análise fatorial
+
+```{r}
+#| code-fold: true
+#| eval: false
+#| code-summary: "Como obter os dados de chuva"
+pak::pak("carlosdemoura/meteobr")
+library(meteobr)
+library(tidyverse)
+
+st = stations |> filter(state == "Minas Gerais") |> pull(station.id)
+
+df =
+  get_data(first.day = "2025-01-01", last.day = "2025-12-31", stations = st, vars = "temperature_air") |>
+  filter(station %in% st) |>
+  mutate(
+    time = substr(time,1,7)
+  ) |>
+  group_by(station, time) |>
+  summarise(
+    temp = mean(temperature_air, na.rm = T),
+    .groups = "drop"
+  ) |>
+  rename(mes = "time", estacao = "station")
+
+st_w_na =
+  df |>
+  filter(is.na(temp)) |>
+  pull(estacao) |>
+  unique()
+
+df_wo_na = 
+  df |>
+  filter(!estacao %in% st_w_na) |>
+  pivot_wider(values_from = "temp", names_from = "mes")
+
+write.csv(df_wo_na, "stuff/meteo.csv", row.names = F)
+```
+
+
