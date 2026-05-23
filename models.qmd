@@ -33,24 +33,31 @@ data {
   int<lower=1> n;
   int<lower=1> p;
   matrix[n, p] X;
-  real Y;
+  vector Y;
 }
 parameters {
   vector[p] beta;
 }
 transformed parameters {
-  vector[p] eta;
+  vector[n] eta;
   eta = X * beta;
 }
 model {
   for (i in 1:n) {
-    Y[i] ~ poisson(eta[i]);
+    Y[i] ~ poisson(exp(eta[i]));
   }
   for (k in 1:p) {
     beta[k] ~ normal(0,1);
   }
 }
+
 ```
+
+::: {.callout-note collapse="true"}
+#### Leia-me se você não for uma batata
+
+A compilação do modelo acima (como está) deve falhar. Se em algum momento uma distribuição discreta é atribuida a alguma variável 
+:::
 
 ```{r}
 X = model.matrix(total_tools ~ contact * log(population), data = Kline)
@@ -60,6 +67,7 @@ X
 
 
 ```{r}
+#| code-fold: true
 data =
   list(
     n = nrow(X),
@@ -67,18 +75,8 @@ data =
     X = X,
     Y = Kline$total_tools
   )
-```
 
-O modelo pode ser compilado abaixo ou baixado diretamente 
-```{r}
-#| eval: false
-#| code-fold: true
-
-mod = readRDS(url(""))
-
-# ou
-
-mod = stan_model(model_code = "
+mod_GLM = stan_model(model_name = "GLM", model_code = "
 data {
   int<lower=1> n;
   int<lower=1> p;
@@ -89,12 +87,12 @@ parameters {
   vector[p] beta;
 }
 transformed parameters {
-  vector[p] eta;
+  vector[n] eta;
   eta = X * beta;
 }
 model {
   for (i in 1:n) {
-    Y[i] ~ poisson(eta[i]);
+    Y[i] ~ poisson(exp(eta[i]));
   }
   for (k in 1:p) {
     beta[k] ~ normal(0,1);
@@ -102,6 +100,18 @@ model {
 }
 
 ")
+```
+
+
+```{r}
+#| eval: false
+fit_GLM = rstan::sampling(mod_GLM, data = data)
+```
+
+```{r}
+#| echo: false
+out = capture.output({fit_GLM = rstan::sampling(mod_GLM, data = data)})
+cat(out[1:15], sep="\n")
 ```
 
 

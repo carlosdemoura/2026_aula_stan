@@ -32,7 +32,7 @@ Este é o [material auxiliar](https://github.com/carlosdemoura/2026_aula_stan_da
 #| eval: false
 if (!"pak" %in% installed.packages()[,"Package"]) install.packages("pak")
 
-c("tidyverse", "rstan", "coda", "deldir", "posterior", "shinystan") |>
+c("tidyverse", "rstan", "coda", "deldir", "posterior", "shinystan", "loo") |>
   setdiff(installed.packages()[,"Package"]) |>
   pak::pak()
 ```
