@@ -478,7 +478,7 @@ st_w_na =
 df_wo_na = 
   df |>
   filter(!estacao %in% st_w_na) |>
-  left_join(select(stations,"station.id", "town.id"), by = c("estacao" = "station.id")) |>
+  left_join(select(stations,"station.id", "town.id", "lat", "lon"), by = c("estacao" = "station.id")) |>
   left_join(ibge, by = "town.id") |>
   mutate(
     regiao = case_when(
@@ -501,8 +501,11 @@ temperatura = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026
 
 ```{r}
 #| echo: false
-temperatura[1:10, 1:7] |>
-  knitr::kable(digits=2)
+set.seed(12345)
+temperatura[, 1:8] |>
+    sample_n(10) |>
+    arrange(regiao) |>
+    knitr::kable(digits=2)
 ```
 
 ![Regiões de MG](https://upload.wikimedia.org/wikipedia/commons/8/8e/Regi%C3%B5es_Geogr%C3%A1ficas_Intermedi%C3%A1rias_e_Regi%C3%B5es_Geogr%C3%A1ficas_Imediatas_do_estado_de_Minas_Gerais%2C_Brasil.png){width=50%}
