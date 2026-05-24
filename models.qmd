@@ -554,3 +554,46 @@ model {
   }}
 }
 ```
+
+
+```{r}
+#| code-fold: true
+group.sizes =
+  temperatura |>
+  pull(regiao) |>
+  table() |>
+  unname()
+
+n = sum(group.sizes)
+n.fac = 3
+
+group.limits =
+  group.sizes |>
+  {\(x) list(
+    c(1, (cumsum(x) + 1)[1:(length(x)-1)])[1:length(x)],
+    cumsum(x)
+  )}()
+
+contr = matrix(0, nrow = n, ncol = n.fac)
+for (i in 1:n.fac) {
+  contr[group.limits[[1]][i] : group.limits[[2]][i], i] = rep(1, group.sizes[i])
+}
+
+contr[contr!=0] = 1:sum(contr!=0)
+
+X =
+  temperatura |>
+  select(starts_with("X"))
+
+data = list(
+  X = X,
+  n_row = nrow(X),
+  n_col = ncol(X),
+  n_fac = 3,
+  n_alpha_free = max(contr),
+  sigma2_shape = .1,
+  sigma2_rate  = .1,
+  alpha_status = contr
+)
+```
+
