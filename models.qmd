@@ -509,3 +509,48 @@ temperatura[, 1:8] |>
 ```
 
 ![Regiões de MG](https://upload.wikimedia.org/wikipedia/commons/8/8e/Regi%C3%B5es_Geogr%C3%A1ficas_Intermedi%C3%A1rias_e_Regi%C3%B5es_Geogr%C3%A1ficas_Imediatas_do_estado_de_Minas_Gerais%2C_Brasil.png){width=50%}
+
+
+```stan
+data {
+  int<lower=1> n_row;
+  int<lower=1> n_col;
+  int<lower=1> n_fac;
+  matrix[n_row, n_col] X;
+  int<lower=1> n_alpha_free;
+  real<lower=0> sigma2_shape;
+  real<lower=0> sigma2_rate;
+  int<lower=0> alpha_status[n_row, n_fac];
+}
+parameters {
+  vector[n_alpha_free] alpha_;
+  matrix[2, n_col] lambda;
+  matrix<lower=0>[n_row,1] sigma2;
+}
+transformed parameters {
+  matrix[n_row, n_fac] alpha;
+  for (i in 1:n_row) { for (k in 1:n_fac) {
+    if (alpha_status[i,k] == 0) {
+      alpha[i,k] = 0;
+    } else {
+      alpha[i,k] = alpha_[alpha_status[i,k]];
+    }
+  }}
+}
+model {
+  matrix[n_row, n_col] alpha_lambda;
+  alpha_lambda = alpha * lambda;
+  for(i in 1:n_row){ for (j in 1:n_col) {
+    X[i,j] ~ normal( alpha_lambda[i,j], sqrt(sigma2[i,1]) );
+  }}
+  for(i in 1:n_alpha_free) {
+    alpha_[i] ~ normal(0,10);
+  }
+  for(i in 1:n_row){
+    sigma2[i,1] ~ gamma(sigma2_shape, sigma2_rate);
+  }
+  for (k in 1:n_fac) { for(j in 1:n_col){ 
+    lambda[k,j] ~ normal(0, 1);
+  }}
+}
+```

@@ -769,25 +769,25 @@ $lp__
 <span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(resumo, head)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$alpha
-         media   mediana   hpd_min   hpd_max
-[1,] 0.3096167 0.3066991 0.2082603 0.4117521
+         media   mediana   hpd_min  hpd_max
+[1,] 0.3120783 0.3082825 0.2133134 0.415461
 
 $sigma
         media  mediana  hpd_min  hpd_max
-[1,] 197.8805 194.4638 90.91326 307.6409
+[1,] 199.5679 193.3134 98.22875 316.7427
 
 $S
          media   mediana   hpd_min   hpd_max
 [1,] 1.0000000 1.0000000 1.0000000 1.0000000
-[2,] 0.5780644 0.5759515 0.4681888 0.6856751
-[3,] 0.5083154 0.5056614 0.4134919 0.6050449
-[4,] 0.4648969 0.4622727 0.3767587 0.5513053
-[5,] 0.4331910 0.4309017 0.3512896 0.5121725
-[6,] 0.4082187 0.4061805 0.3353424 0.4849570
+[2,] 0.5804155 0.5772362 0.4839777 0.7021343
+[3,] 0.5103537 0.5064900 0.4180246 0.6136099
+[4,] 0.4666843 0.4629035 0.3839322 0.5599600
+[5,] 0.4347718 0.4307720 0.3593972 0.5215415
+[6,] 0.4096244 0.4057403 0.3353468 0.4856047
 
 $lp__
          media   mediana   hpd_min   hpd_max
-[1,] -465.8513 -465.5287 -467.8995 -464.8251</code></pre>
+[1,] -465.8485 -465.5342 -467.9141 -464.8247</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -877,7 +877,7 @@ $lp__
 <span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>df_wo_na <span class="ot">=</span> </span>
 <span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span></span>
 <span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>estacao <span class="sc">%in%</span> st_w_na) <span class="sc">|&gt;</span></span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">select</span>(stations,<span class="st">"station.id"</span>, <span class="st">"town.id"</span>), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"estacao"</span> <span class="ot">=</span> <span class="st">"station.id"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">select</span>(stations,<span class="st">"station.id"</span>, <span class="st">"town.id"</span>, <span class="st">"lat"</span>, <span class="st">"lon"</span>), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"estacao"</span> <span class="ot">=</span> <span class="st">"station.id"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ibge, <span class="at">by =</span> <span class="st">"town.id"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">regiao =</span> <span class="fu">case_when</span>(</span>
@@ -900,107 +900,128 @@ $lp__
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">regiao</th>
 <th style="text-align: left;">estacao</th>
+<th style="text-align: right;">lat</th>
+<th style="text-align: right;">lon</th>
 <th style="text-align: right;">X2025.01</th>
 <th style="text-align: right;">X2025.02</th>
 <th style="text-align: right;">X2025.03</th>
 <th style="text-align: right;">X2025.04</th>
-<th style="text-align: right;">X2025.05</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">NORTE</td>
 <td style="text-align: left;">A549</td>
+<td style="text-align: right;">-15.75</td>
+<td style="text-align: right;">-41.46</td>
 <td style="text-align: right;">23.26</td>
 <td style="text-align: right;">23.09</td>
 <td style="text-align: right;">23.19</td>
 <td style="text-align: right;">22.47</td>
-<td style="text-align: right;">19.85</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">NORTE</td>
 <td style="text-align: left;">A552</td>
+<td style="text-align: right;">-16.16</td>
+<td style="text-align: right;">-42.31</td>
 <td style="text-align: right;">25.27</td>
 <td style="text-align: right;">26.19</td>
 <td style="text-align: right;">26.69</td>
 <td style="text-align: right;">25.77</td>
-<td style="text-align: right;">22.75</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">NORTE</td>
 <td style="text-align: left;">A543</td>
+<td style="text-align: right;">-14.91</td>
+<td style="text-align: right;">-42.81</td>
 <td style="text-align: right;">26.49</td>
 <td style="text-align: right;">27.88</td>
 <td style="text-align: right;">28.50</td>
 <td style="text-align: right;">26.22</td>
-<td style="text-align: right;">24.27</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SUL</td>
 <td style="text-align: left;">A513</td>
+<td style="text-align: right;">-20.56</td>
+<td style="text-align: right;">-43.76</td>
 <td style="text-align: right;">21.84</td>
 <td style="text-align: right;">22.77</td>
 <td style="text-align: right;">21.47</td>
 <td style="text-align: right;">19.79</td>
-<td style="text-align: right;">17.68</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SUL</td>
 <td style="text-align: left;">A516</td>
+<td style="text-align: right;">-20.75</td>
+<td style="text-align: right;">-46.63</td>
 <td style="text-align: right;">23.34</td>
 <td style="text-align: right;">24.11</td>
 <td style="text-align: right;">24.07</td>
 <td style="text-align: right;">21.85</td>
-<td style="text-align: right;">19.15</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SUL</td>
 <td style="text-align: left;">A510</td>
+<td style="text-align: right;">-20.76</td>
+<td style="text-align: right;">-42.86</td>
 <td style="text-align: right;">23.15</td>
 <td style="text-align: right;">23.23</td>
 <td style="text-align: right;">22.87</td>
 <td style="text-align: right;">21.07</td>
-<td style="text-align: right;">18.57</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SUL</td>
 <td style="text-align: left;">A517</td>
+<td style="text-align: right;">-21.10</td>
+<td style="text-align: right;">-42.38</td>
 <td style="text-align: right;">25.62</td>
 <td style="text-align: right;">27.15</td>
 <td style="text-align: right;">25.55</td>
 <td style="text-align: right;">23.60</td>
-<td style="text-align: right;">21.39</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SUL</td>
 <td style="text-align: left;">A524</td>
+<td style="text-align: right;">-20.45</td>
+<td style="text-align: right;">-45.45</td>
 <td style="text-align: right;">23.35</td>
 <td style="text-align: right;">24.55</td>
 <td style="text-align: right;">24.01</td>
 <td style="text-align: right;">21.92</td>
-<td style="text-align: right;">19.44</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">TRIANGULO</td>
 <td style="text-align: left;">A525</td>
+<td style="text-align: right;">-19.88</td>
+<td style="text-align: right;">-47.43</td>
 <td style="text-align: right;">23.55</td>
 <td style="text-align: right;">24.42</td>
 <td style="text-align: right;">24.42</td>
 <td style="text-align: right;">22.46</td>
-<td style="text-align: right;">20.14</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">TRIANGULO</td>
 <td style="text-align: left;">A507</td>
+<td style="text-align: right;">-18.92</td>
+<td style="text-align: right;">-48.26</td>
 <td style="text-align: right;">24.24</td>
 <td style="text-align: right;">24.99</td>
 <td style="text-align: right;">25.52</td>
 <td style="text-align: right;">23.88</td>
-<td style="text-align: right;">21.69</td>
 </tr>
 </tbody>
 </table>
@@ -1012,6 +1033,47 @@ $lp__
 <figcaption>Regiões de MG</figcaption>
 </figure>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_row;</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_col;</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_fac;</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[n_row, n_col] X;</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_alpha_free;</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma2_shape;</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma2_rate;</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; alpha_status[n_row, n_fac];</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[n_alpha_free] alpha_;</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[<span class="dv">2</span>, n_col] lambda;</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[n_row,<span class="dv">1</span>] sigma2;</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[n_row, n_fac] alpha;</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:n_row) { <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span>:n_fac) {</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (alpha_status[i,k] == <span class="dv">0</span>) {</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>      alpha[i,k] = <span class="dv">0</span>;</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>      alpha[i,k] = alpha_[alpha_status[i,k]];</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>  }}</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[n_row, n_col] alpha_lambda;</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>  alpha_lambda = alpha * lambda;</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_row){ <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span>:n_col) {</span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>    X[i,j] ~ normal( alpha_lambda[i,j], sqrt(sigma2[i,<span class="dv">1</span>]) );</span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>  }}</span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_alpha_free) {</span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>    alpha_[i] ~ normal(<span class="dv">0</span>,<span class="dv">10</span>);</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_row){</span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>    sigma2[i,<span class="dv">1</span>] ~ gamma(sigma2_shape, sigma2_rate);</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span>:n_fac) { <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span>:n_col){ </span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>    lambda[k,j] ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>  }}</span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
