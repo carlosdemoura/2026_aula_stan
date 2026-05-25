@@ -13,11 +13,11 @@ library(posterior)
 library(shinystan)
 ```
 
-## Predições no STAN
-
-> Bayesian models are generative, meaning they can be used to simulate observations just as well as they can be used to estimate parameters. One benefit of this fact is that a statistical model can be developed by thinking hard about how the data might have arisen.”
+> "Bayesian models are generative, meaning they can be used to simulate observations just as well as they can be used to estimate parameters. One benefit of this fact is that a statistical model can be developed by thinking hard about how the data might have arisen.”
 >
 > — Richard McElreath, *Statistical Rethinking: A Bayesian Course with Examples in R and Stan* (2020)
+
+## Predições no STAN
 
 Predições como parâmetro vs. generated quantites
 
@@ -44,7 +44,6 @@ estudantes =
 write.csv(estudantes, "stuff/estudantes.csv", row.names = F)
 ```
 
-
 ```{r}
 library(rsample)
 
@@ -56,7 +55,7 @@ estudantes_treino = training(split)
 estudantes_teste  = testing(split)
 ```
 
-```stan
+``` stan
 transformed parameters {
   vector[n_obs] eta_obs;
   vector[n_pred] mu_pred;
@@ -83,7 +82,6 @@ data_GLM_pred =
     Y = estudantes_treino$pass
   )
 ```
-
 
 ```{r}
 #| code-fold: true
@@ -120,7 +118,6 @@ model {
 #| echo: false
 mod_GLM_pred = readRDS("stuff/mod_GLM_pred.rds")
 ```
-
 
 ```{r}
 #| eval: false
@@ -165,8 +162,7 @@ is.missing = matrix(0, nrow = nrow(temperatura), ncol = 12)
 is.missing[coor.missing] = 1:nrow(coor.missing)
 ```
 
-
-```stan
+``` stan
 transformed parameters {
   ...
   
@@ -191,10 +187,10 @@ model {
 }
 ```
 
-
 ```{r}
 #| eval: false
 #| code-fold: true
+#| code-summary: "STAN model"
 mod_FA_pred = stan_model(model_name = "FA_pred", model_code = "
 data {
   int<lower=1> n_row;
@@ -267,6 +263,7 @@ mod_FA_pred = readRDS("stuff/mod_FA_pred.rds")
 
 ```{r}
 #| code-fold: true
+#| code-summary: "Setup para bloco data"
 group.sizes =
   temperatura |>
   pull(estado) |>
@@ -328,7 +325,6 @@ out = capture.output({fit_FA_pred = rstan::sampling(mod_FA_pred, data = data_FA_
 cat(out[1:15], sep = "\n")
 ```
 
-
 ```{r}
 #| code-fold: true
 pred_post =
@@ -358,16 +354,13 @@ cv =
   select(-c(linha, id_pred))
 ```
 
-
 ```{r}
 #| out-width: "60%"
 #| fig-align: center
 hist(cv$vr)
 ```
 
-
 ```{r}
 mean(100*cv$hpd_contem)
 mean(cv$hpd_amp)
 ```
-

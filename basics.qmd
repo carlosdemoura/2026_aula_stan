@@ -39,24 +39,23 @@ No bloco `model` são feitas todas as declarações probabilísticas, o que envo
 
 ### Bloco functions {.unnumbered}
 
-O bloco functions serve para declarar funções que serão utilizadas ao longo do código Stan. As funções nessa sintaxe seguem a mesma lógica das funções escritas em C++, o que inclui a necessidade de declarar explicitamente o tipo do valor de retorno e o tipo de cada argumento. Assim como em C++, o Stan não suporta funções com número variável de argumentos nem sobrecarga de operadores de forma arbitrária, o que reforça o caráter fortemente tipado da linguagem.
+O bloco `functions` serve para declarar funções que serão utilizadas ao longo do código Stan. As funções nessa sintaxe seguem a mesma lógica das funções escritas em C++, o que inclui a necessidade de declarar explicitamente o tipo do valor de retorno e o tipo de cada argumento.
 
 ## Argumentos importantes
 
-O help pode ser acessado via `?rstan::sampling` ou `?rstan::stan`
+O help pode ser acessado via `?rstan::sampling` ou `?rstan::stan`.
 
 * `chains`: o número de cadeias que se deseja rodar
 * `init`: aqui ficam armazenados os valores do chute inicial das cadeias. Esse argumento deve ser obrigatoriamente uma lista de listas em que, no primeiro nível, fica a cadeia e, no segundo nível, uma lista nomeada com os parâmetros especificados no `.stan` e cujos valores são o chute inicial da cadeia.
 Note que deve sempre valer `length(init) == chains`.
-No exemplo abaixo, o modelo tem dois parâmetros ($\alpha$ e $\beta$) e na primeira cadeia o chute inicial é $\alpha_0 = 2, \beta_0=3$ enquanto na segunda cadeia é  $\alpha_0 = -1, \beta_0=0$.
+No exemplo abaixo, o modelo tem dois parâmetros ($\alpha$ e $\beta$) e na primeira cadeia o chute inicial é $\alpha_0 = 2, \beta_0=3$; na segunda cadeia é  $\alpha_0 = -1, \beta_0$ é escolhido pelo STAN; na terceira cadeia $\beta_0=100$ e $\alpha$ é escolhido pelo STAN, pois não foi especificado.
 
 ```{r}
 init =
   list(
     list(alpha = 2, beta = 3),
-    list(alpha = -1, beta = 0),
-    list("random"),
-    list(0)
+    list(alpha = -1, beta = "random"),
+    list(beta = 100)
   )
 ```
 
@@ -86,9 +85,6 @@ Essa filosofia é tão forte no pacote que não é possível alterar o valor do 
 
 Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), `warmup` e `iter` podem ter significados diferentes dos do rstan. É possível que `iter` signifique o número de amostras que o programa vai tomar após o `warmup`, então o total de iterações é dado por `warmup` + `iter`. No caso do rstan o total de iterações é `iter` - e, nesse caso, o tamanho da amostra da posteriori é `iter` - `warmup`.
 :::
-
-
-
 
 * `cores`: especifica quantos núcleos do processador serão utilizados no processo de estimação. Como os algoritmos MCMC são sequenciais por natureza, a forma mais direta de ganhar eficiência é dedicar um núcleo a cada cadeia, rodando-as em paralelo.
 * `data`: devem ser passados (por meio de uma lista) todos os objetos declarados no bloco `data` do arquivo `.stan`. É, essencialmente, a ponte entre o ambiente do R e o modelo especificado no Stan.

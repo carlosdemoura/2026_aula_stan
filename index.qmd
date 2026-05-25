@@ -23,7 +23,7 @@ Pessoa
 
 ## Sobre {.unnumbered}
 
-Este é o [material auxiliar](https://github.com/carlosdemoura/2026_aula_stan_dani) da apresentação sobre STAN para a turma de Inferência Bayesiana (DCC/DEST-UFMG, 2026/1). Feito em [Quarto](https://quarto.org/) e R!
+Este é o [material auxiliar](https://github.com/carlosdemoura/2026_aula_stan_dani) da apresentação sobre STAN para a turma de Inferência Bayesiana (DCC/DEST-UFMG, 2026/1). Orgulhosamente feito em [Quarto](https://quarto.org/) e R!
 
 ## Setup do ambiente {.unnumbered}
 

@@ -13,6 +13,8 @@ library(posterior)
 library(shinystan)
 ```
 
+Abaixo veremos alguns modelos analisados sob o paradigma subjetivista. Para economizar tempo, suprimimos análises exploratórias, mas reforçamos que essa etapa é indispensável para qualquer análise estatística.
+
 <!--
 
 ```{r}
@@ -125,7 +127,8 @@ out = capture.output({fit_GLM = rstan::sampling(mod_GLM, data = data_GLM)})
 -->
 ## GLM
 
-Os dados que usaremos primeiro são sobre casos de câncer de pulmão registrados em quatro cidades dinamarquesas: Fredericia, Horsens, Kolding e Vejle. O modelo proposto é um modelo linear generalizado com distribuição de Poisson e função de ligação logarítmica e offset, ou seja um modelo de taxas de risco relativo. O modelo é especificado da seguinte forma:
+Os dados que usaremos primeiro são sobre casos de câncer de pulmão registrados em quatro cidades dinamarquesas: Fredericia, Horsens, Kolding e Vejle. O modelo proposto é um modelo linear generalizado com distribuição de Poisson e função de ligação logarítmica e offset, ou seja um modelo de taxas de risco relativo.
+
 
 ```{r}
 danishlc = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan/refs/heads/main/stuff/danishlc.csv"), sep =",")
@@ -139,11 +142,13 @@ danishlc |>
   knitr::kable(align="c")
 ```
 
+O modelo é especificado da seguinte forma:
+
 $$Y_i \sim \text{Poisson}(\mu_i)$$
 
-$$\log(\mu_i) = \log(n_i) + \alpha + \beta_{\text{idade}[i]} + \gamma_{\text{cidade}[i]}$$
+$$\log(\mu_i) = \log(n_i) + \beta_0 + \beta_{\text{age}[i]} + \beta_{\text{city}[i]}$$
 
-
+Para todos os coeficientes do preditor linear foi adotada a mesma priori vaga: $\beta_i \sim N(0,10)$.
 
 
 ```stan
@@ -268,10 +273,14 @@ cat(out[1:15], sep = "\n")
 ```
 
 ```{r}
+#| out-width: "60%"
+#| fig-align: center
 plot(fit_GLM2, pars = "beta", ci_level = 0.95)
 ```
 
 ## Análise de sobrevivência
+
+Os dados utilizados foram extraídos do livro *Análise de Sobrevivência Aplicada* (Colosimo e Giolo), e referem-se aos tempos (em horas) até a falha de isoladores de uma rede elétrica. O estudo apresenta censura à direita, gerada pelo encerramento do experimento às 2729 horas, momento a partir do qual os isoladores que ainda não haviam falhado passaram a ser tratados como observações censuradas.
 
 ```{r}
 isoladores = read.csv(url("https://github.com/carlosdemoura/2026_aula_stan/raw/refs/heads/main/stuff/isoladores.csv"))
@@ -299,7 +308,9 @@ survfit(Surv(tempo, evento)~1, data = isoladores) |>
   plot(mark.time=T)
 ```
 
-O modelo ajustado assume que os tempos de falha dos isoladores seguem uma distribuição de Weibull com parâmetro de forma $\alpha$ e parâmetro de escala $\sigma$, de modo que a função de sobrevivência é dada por $S(t) = \exp\left\{-\left(t/\sigma\right)^{\alpha}\right\}$. As distribuições a priori adotadas foram $\alpha \sim \text{Gamma}(0.1, 0.1)$ e $\sigma \sim \text{Gamma}(0.1, 0.1)$, ambas pouco informativas. A verossimilhança é construída observação a observação: para os isoladores que falharam, a contribuição é a densidade de Weibull avaliada no tempo de falha; para os isoladores censurados às 2729 horas, a contribuição é $S(t) = P(T > t)$, isto é, a probabilidade de o isolador ter sobrevivido além do tempo de censura. Ao combinar essas contribuições com as distribuições a priori, o algoritmo de amostragem obtém a distribuição posterior de $\alpha$ e $\sigma$, a partir da qual é possível derivar a distribuição posterior da própria curva de sobrevivência em qualquer ponto do tempo.
+O modelo ajustado assume que os tempos de falha dos isoladores seguem uma distribuição de Weibull com parâmetro de forma $\alpha$ e parâmetro de escala $\sigma$, de modo que a função de sobrevivência é dada por $S(t) = \exp\left\{-\left(t/\sigma\right)^{\alpha}\right\}$. As distribuições a priori adotadas foram $\alpha \sim \text{Gamma}(0.1, 0.1)$ e $\sigma \sim \text{Gamma}(0.1, 0.1)$, ambas pouco informativas.
+
+A verossimilhança é construída observação a observação: para os isoladores que falharam, a contribuição é a densidade de Weibull avaliada no tempo de falha; para os isoladores censurados às 2729 horas, a contribuição é $S(t) = P(T > t)$, isto é, a probabilidade de o isolador ter sobrevivido além do tempo de censura.
 
 ```stan
 data {
@@ -333,6 +344,11 @@ generated quantities {
   }
 }
 ```
+::: {.callout-tip}
+#### Estimando a sobrevivência
+
+A partir da estimação da distribuição a posteriori dos parâmetros é possível derivar a distribuição posterior da própria curva de sobrevivência em qualquer ponto do tempo, aqui escolhemos um grid de 100 pontos entre zero e o tempo máximo.
+:::
 
 
 ```{r}
@@ -407,14 +423,10 @@ cat(out[1:15], sep = "\n")
 ```{r}
 post = rstan::extract(fit_surv_weib)
 
-lapply(post, dim)
-```
-
-
-```{r}
 for (par in c("alpha", "sigma", "lp__")) {
   post[[par]] = matrix(post[[par]])
 }
+
 lapply(post, dim)
 ```
 
@@ -483,6 +495,8 @@ Para não desistir da inferência Bayesiana, refaça a análise acima padronizan
 
 ## Análise fatorial
 
+Os dados utilizados se referem às estações meteorológicas automáticas do INMET no ano de 2025. A matriz de dados $X$, de dimensão $n \times m$, tem nas linhas as estações meteorológicas e nas colunas os meses do ano, de modo que a entrada $x_{ij}$ corresponde à temperatura média da estação $i$ no mês $j$. As estações estão distribuídas entre três estados: Amazonas, Pernambuco e Santa Catarina. Para a construção dessa matriz, foram excluídas todas as estações que apresentavam dados faltantes em ao menos um mês inteiro.
+
 ```{r}
 #| code-fold: true
 #| eval: false
@@ -537,6 +551,22 @@ temperatura[, 1:8] |>
 ```
 
 
+O modelo é especificado como:
+
+$$X = \alpha \lambda + \varepsilon$$
+
+onde $X \in \mathbb R^{n \times m}$, $\alpha \in \mathbb R^{ n \times 3}$ (bloco diagonal), $\lambda \in \mathbb R^{3 \times m}$, e $\varepsilon \in \mathbb R^{n \times m}$ (matriz de erros). A estrutura bloco diagonal de $\alpha$ implica que cada estação carrega apenas informações do fator do seu respectivo estado. As distribuições a priori adotadas são $\alpha_{ij} \sim \text{Normal}(0, 10)$ para os elementos não nulos de $\alpha$ e $\lambda_{ij} \sim \text{Normal}(0, 1)$ para todos os elementos de $\lambda$.
+
+::: {.callout-tip}
+#### Identificabilidade das identificabilidades, é tudo identificabilidade
+
+A restrição à estrutura bloco diagonal, combinada com a priori mais concentrada em $\lambda$, serve para tornar o modelo identificável, uma vez que o produto $\alpha \lambda$ é invariante a rotações ortogonais, isto é, $\alpha \lambda = (\alpha Q)(Q^\top \lambda)$ para qualquer $Q$ ortogonal.
+:::
+
+Para a verossimilhança, assume-se que cada coluna de $\varepsilon_{i,j} \sim N(0, \sigma^2_i)$, o que é equivalente a assumir que:
+
+$$X_{i,j} \sim \text{Normal}\bigr((\alpha\lambda)_{i,j},\ \sigma^2_i\bigr).$$
+
 ```stan
 data {
   int<lower=1> n_row;
@@ -580,7 +610,7 @@ model {
   }
 }
 
-```
+``` 
 
 ```{r}
 #| eval: false
@@ -702,7 +732,6 @@ cat(out[1:15], sep = "\n")
 
 
 ```{r}
-#| code-fold: true
 post = rstan::extract(fit_FA, pars = c("alpha", "lambda", "sigma"))
 resumo = list()
 
@@ -720,7 +749,6 @@ for ( parameter in names(post) ) {
     "hpd_max" = apply( hpd_temp, 2:3, function(x) { unlist(x) |> purrr::pluck(2) })
   )
 }
-
 
 resumo = sapply(resumo, function(x) { abind::abind(x, along = 3) })
 ```
@@ -749,7 +777,6 @@ resumo$alpha[,,"media"] |>
 ```{r}
 resumo$alpha[,,"media"] |> {\(.) .[.!=0]}() |> quantile(probs = c(0,1)) |> round(2)
 ```
-
 
 ```{r}
 #| code-fold: true

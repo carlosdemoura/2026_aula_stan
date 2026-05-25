@@ -171,7 +171,7 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./basics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um arquivo stan</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um modelo</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -224,12 +224,12 @@ div.csl-indent {
 </header>
 
 
-<section id="predições-no-stan" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="predições-no-stan"><span class="header-section-number">4.1</span> Predições no STAN</h2>
 <blockquote class="blockquote">
 <p>Bayesian models are generative, meaning they can be used to simulate observations just as well as they can be used to estimate parameters. One benefit of this fact is that a statistical model can be developed by thinking hard about how the data might have arisen.”</p>
 <p>— Richard McElreath, <em>Statistical Rethinking: A Bayesian Course with Examples in R and Stan</em> (2020)</p>
 </blockquote>
+<section id="predições-no-stan" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="predições-no-stan"><span class="header-section-number">4.1</span> Predições no STAN</h2>
 <p>Predições como parâmetro vs.&nbsp;generated quantites</p>
 </section>
 <section id="glm" class="level2" data-number="4.2">
@@ -256,7 +256,7 @@ div.csl-indent {
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>estudantes <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/estudantes.csv"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>estudantes <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan/refs/heads/main/stuff/estudantes.csv"</span>))</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>split <span class="ot">=</span> <span class="fu">initial_split</span>(estudantes, <span class="at">prop =</span> <span class="fl">0.8</span>, <span class="at">strata =</span> pass)</span>
@@ -323,21 +323,21 @@ div.csl-indent {
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] ""                                                                                         
- [2] "SAMPLING FOR MODEL 'GLM_pred' NOW (CHAIN 1)."                                             
- [3] "Chain 1: "                                                                                
- [4] "Chain 1: Gradient evaluation took 0.000123 seconds"                                       
- [5] "Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.23 seconds."
- [6] "Chain 1: Adjust your expectations accordingly!"                                           
- [7] "Chain 1: "                                                                                
- [8] "Chain 1: "                                                                                
- [9] "Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)"                                         
-[10] "Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)"                                         
-[11] "Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)"                                         
-[12] "Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)"                                         
-[13] "Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)"                                         
-[14] "Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)"                                         
-[15] "Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)"                                       </code></pre>
+<pre><code>
+SAMPLING FOR MODEL 'GLM_pred' NOW (CHAIN 1).
+Chain 1: 
+Chain 1: Gradient evaluation took 0.000121 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.21 seconds.
+Chain 1: Adjust your expectations accordingly!
+Chain 1: 
+Chain 1: 
+Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
@@ -362,7 +362,7 @@ div.csl-indent {
 <section id="fa" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="fa"><span class="header-section-number">4.3</span> FA</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>temperatura <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/temperatura.csv"</span>), <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>temperatura <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan/refs/heads/main/stuff/temperatura.csv"</span>), <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>n.pred <span class="ot">=</span> <span class="fu">floor</span>(.<span class="dv">2</span> <span class="sc">*</span> <span class="fu">nrow</span>(temperatura) <span class="sc">*</span> <span class="dv">12</span>)</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -402,7 +402,7 @@ div.csl-indent {
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell">
 <details class="code-fold">
-<summary>Código</summary>
+<summary>STAN model</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mod_FA_pred <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="at">model_name =</span> <span class="st">"FA_pred"</span>, <span class="at">model_code =</span> <span class="st">"</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="st">data {</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="st">  int&lt;lower=1&gt; n_row;</span></span>
@@ -470,7 +470,7 @@ div.csl-indent {
 </div>
 <div class="cell">
 <details class="code-fold">
-<summary>Código</summary>
+<summary>Setup para bloco data</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>group.sizes <span class="ot">=</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  temperatura <span class="sc">|&gt;</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(estado) <span class="sc">|&gt;</span></span>
@@ -526,21 +526,21 @@ div.csl-indent {
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] ""                                                                                         
- [2] "SAMPLING FOR MODEL 'FA_pred' NOW (CHAIN 1)."                                              
- [3] "Chain 1: "                                                                                
- [4] "Chain 1: Gradient evaluation took 5.4e-05 seconds"                                        
- [5] "Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.54 seconds."
- [6] "Chain 1: Adjust your expectations accordingly!"                                           
- [7] "Chain 1: "                                                                                
- [8] "Chain 1: "                                                                                
- [9] "Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)"                                         
-[10] "Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)"                                         
-[11] "Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)"                                         
-[12] "Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)"                                         
-[13] "Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)"                                         
-[14] "Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)"                                         
-[15] "Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)"                                       </code></pre>
+<pre><code>
+SAMPLING FOR MODEL 'FA_pred' NOW (CHAIN 1).
+Chain 1: 
+Chain 1: Gradient evaluation took 5.4e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.54 seconds.
+Chain 1: Adjust your expectations accordingly!
+Chain 1: 
+Chain 1: 
+Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 </div>
 </div>
 <div class="cell">
