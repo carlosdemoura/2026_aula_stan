@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; Estrutura básica de um arquivo stan – Aula sobre STAN</title>
+<title>2&nbsp; Estrutura básica de um modelo – Aula sobre STAN</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -167,7 +167,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./basics.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um arquivo stan</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./basics.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um modelo</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -201,7 +201,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./basics.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um arquivo stan</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um modelo</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -232,13 +232,12 @@ window.Quarto = {
   </ul></li>
   <li><a href="#blocos" id="toc-blocos" class="nav-link" data-scroll-target="#blocos"><span class="header-section-number">2.2</span> Blocos</a>
   <ul class="collapse">
-  <li><a href="#bloco-data" id="toc-bloco-data" class="nav-link" data-scroll-target="#bloco-data">Bloco data</a></li>
-  <li><a href="#bloco-parameters-transformed-parameters" id="toc-bloco-parameters-transformed-parameters" class="nav-link" data-scroll-target="#bloco-parameters-transformed-parameters">Bloco parameters &amp; transformed parameters</a></li>
+  <li><a href="#bloco-data-transformed-data" id="toc-bloco-data-transformed-data" class="nav-link" data-scroll-target="#bloco-data-transformed-data">Bloco data &amp; transformed data</a></li>
+  <li><a href="#blocos-parameters-transformed-parameters" id="toc-blocos-parameters-transformed-parameters" class="nav-link" data-scroll-target="#blocos-parameters-transformed-parameters">Blocos parameters &amp; transformed parameters</a></li>
   <li><a href="#bloco-model" id="toc-bloco-model" class="nav-link" data-scroll-target="#bloco-model">Bloco model</a></li>
   <li><a href="#bloco-functions" id="toc-bloco-functions" class="nav-link" data-scroll-target="#bloco-functions">Bloco functions</a></li>
   </ul></li>
   <li><a href="#argumentos-importantes" id="toc-argumentos-importantes" class="nav-link" data-scroll-target="#argumentos-importantes"><span class="header-section-number">2.3</span> Argumentos importantes</a></li>
-  <li><a href="#extraindo-e-analisando-a-amostra" id="toc-extraindo-e-analisando-a-amostra" class="nav-link" data-scroll-target="#extraindo-e-analisando-a-amostra"><span class="header-section-number">2.4</span> Extraindo e analisando a amostra</a></li>
   </ul>
 </nav>
     </div>
@@ -247,7 +246,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um arquivo stan</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estrutura básica de um modelo</span></h1>
 </div>
 
 
@@ -266,8 +265,8 @@ window.Quarto = {
 
 <section id="sobre-o-stan" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="sobre-o-stan"><span class="header-section-number">2.1</span> Sobre o STAN</h2>
-<p>O STAN é um software que usa uma sintaxe própria para implementar seu algoritmo de amostragem MCMC. Por conta disso é comum que se diga que STAN é também uma linguagem de programação. Como o STAN foi escrito em C++, a sintaxe que ele requer para a escrita dos scripts tem muitas similaridades com a dessa linguagem, mas também incorpora certos elementos de linguagens interpretadas como o R. Esse é o caso de estruturas como condições, laços e alguns operadores (como soma e multiplicação matriciais).</p>
-<p>A principal diferença entre a sintaxe STAN e a de linguagens interpretadas é a tipagem. Como os algoritmos podem ser pesados</p>
+<p>O STAN é um software que usa uma sintaxe própria para implementar seu algoritmo de amostragem MCMC. Por conta disso é comum que se diga que STAN é também uma linguagem de programação. Como o STAN foi escrito em C++, sua sintaxe tem muitas similaridades com a dessa linguagem, mas também incorpora certos elementos de linguagens interpretadas como o R. Esse é o caso de estruturas como condições, laços e alguns operadores (como soma e multiplicação matriciais).</p>
+<p>A principal diferença entre a sintaxe do Stan e a de linguagens interpretadas como o R é a tipagem. O Stan é fortemente tipado, o que significa que o tipo de cada variável deve ser declarado explicitamente. Isso se deve ao fato de que o compilador do Stan realiza uma série de otimizações para tornar o algoritmo de amostragem mais eficiente.</p>
 <section id="compilação-vs.-estimação" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="compilação-vs.-estimação">Compilação vs.&nbsp;estimação</h3>
 <p>O uso do STAN pode ser dividido em duas etapas: compilação do modelo e construção da cadeia. Uma vez que o modelo está bem especificado (e o script STAN está pronto), é necessário compilar esse código em um arquivo executável (é esse arquivo que tomará amostras de uma cadeia MCMC). Note que</p>
@@ -282,18 +281,21 @@ window.Quarto = {
 <li>verossimilhança (ou a distribuição dos dados condicionados aos parâmetros)</li>
 <li>distribuições prioris dos parâmetros</li>
 </ul>
-<section id="bloco-data" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="bloco-data">Bloco data</h3>
+<section id="bloco-data-transformed-data" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="bloco-data-transformed-data">Bloco data &amp; transformed data</h3>
+<p>O bloco <code>data</code> é onde são declaradas as variáveis que o usuário deve passar ao compilador, podendo ser interpretado como os argumentos de uma função. Já no bloco <code>transformed data</code>, é possível realizar operações sobre essas variáveis. Em resumo, o bloco data deve conter apenas declarações, não sendo permitido atribuir valores a variáveis dentro dele. Caso se queira atribuir ou modificar valores, isso deve ser feito no bloco transformed data.</p>
 </section>
-<section id="bloco-parameters-transformed-parameters" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="bloco-parameters-transformed-parameters">Bloco parameters &amp; transformed parameters</h3>
-<p>Todas as variáveis especificadas nesse bloco devem obrigatoriamente</p>
+<section id="blocos-parameters-transformed-parameters" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="blocos-parameters-transformed-parameters">Blocos parameters &amp; transformed parameters</h3>
+<p>O bloco <code>data</code> é onde são declaradas as variáveis que o usuário deve passar ao compilador, podendo ser interpretado como os argumentos de uma função. Já no bloco <code>transformed data</code>, é possível realizar operações sobre essas variáveis. Em resumo, o bloco <code>data</code> deve conter apenas declarações, não sendo permitido atribuir valores a variáveis dentro dele. Caso se queira atribuir ou modificar valores, isso deve ser feito no bloco <code>transformed data</code>.</p>
 </section>
 <section id="bloco-model" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="bloco-model">Bloco model</h3>
+<p>No bloco <code>model</code> são feitas todas as declarações probabilísticas, o que envolve definir uma distribuição para os dados condicionada aos parâmetros e uma distribuição para os próprios parâmetros. Essa especificação pode ser feita de duas formas: pela notação distribucional usual, em que se declara que uma variável segue determinada distribuição, ou por meio da palavra-chave <code>target</code>, que representa o logaritmo da densidade posterior não normalizada. O objetivo do algoritmo de amostragem será maximizar esse <code>target</code>.</p>
 </section>
 <section id="bloco-functions" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="bloco-functions">Bloco functions</h3>
+<p>O bloco functions serve para declarar funções que serão utilizadas ao longo do código Stan. As funções nessa sintaxe seguem a mesma lógica das funções escritas em C++, o que inclui a necessidade de declarar explicitamente o tipo do valor de retorno e o tipo de cada argumento. Assim como em C++, o Stan não suporta funções com número variável de argumentos nem sobrecarga de operadores de forma arbitrária, o que reforça o caráter fortemente tipado da linguagem.</p>
 </section>
 </section>
 <section id="argumentos-importantes" class="level2" data-number="2.3">
@@ -330,36 +332,10 @@ window.Quarto = {
 </div>
 </div>
 <ul>
-<li><code>iter</code>: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).</li>
 <li><code>warmup</code>: o número de iterações que serão excluídas, por default o STAN escolhe o warmup como sendo igual a metade das iterações.</li>
 </ul>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Conversando na torre de Babel
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), <code>warmup</code> e <code>iter</code> podem ter significados diferentes dos do rstan. É possível que <code>iter</code> signifique o número de amostras que o programa vai tomar após o <code>warmup</code>, então o total de iterações é dado por <code>warmup</code> + <code>iter</code>. No caso do rstan o total de iterações é <code>iter</code> - e, nesse caso, o tamanho da amostra da posteriori é <code>iter</code> - <code>warmup</code>.</p>
-</div>
-</div>
-</div>
-<ul>
-<li><code>cores</code>: .</li>
-<li><code>data</code>:</li>
-<li><code>pars</code>:</li>
-<li><code>seed</code>:</li>
-</ul>
-</section>
-<section id="extraindo-e-analisando-a-amostra" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="extraindo-e-analisando-a-amostra"><span class="header-section-number">2.4</span> Extraindo e analisando a amostra</h2>
 <div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -368,14 +344,38 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>É comum que</p>
 <p>Essa filosofia é tão forte no pacote que não é possível alterar o valor do warmup uma vez que a amostragem foi feita. Assim, a função <code>rstan::extract</code> não aceita um argumento de warmup e nem é possível alterar esse atributo num objeto da classe <code>stanfit</code>, via <code>@</code></p>
 </div>
 </div>
 </div>
-<p>Em estatística Bayesiana, o objeto de toda inferência é a distribuição posteriori. Em particular estamos interessados em resumos essa distribuição, como esperança, mediana, desvio padrão. Outro resumo interessante é o interv</p>
+<ul>
+<li><code>iter</code>: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Conversando na torre de Babel
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), <code>warmup</code> e <code>iter</code> podem ter significados diferentes dos do rstan. É possível que <code>iter</code> signifique o número de amostras que o programa vai tomar após o <code>warmup</code>, então o total de iterações é dado por <code>warmup</code> + <code>iter</code>. No caso do rstan o total de iterações é <code>iter</code> - e, nesse caso, o tamanho da amostra da posteriori é <code>iter</code> - <code>warmup</code>.</p>
+</div>
+</div>
+</div>
+<ul>
+<li><code>cores</code>: especifica quantos núcleos do processador serão utilizados no processo de estimação. Como os algoritmos MCMC são sequenciais por natureza, a forma mais direta de ganhar eficiência é dedicar um núcleo a cada cadeia, rodando-as em paralelo.</li>
+<li><code>data</code>: devem ser passados (por meio de uma lista) todos os objetos declarados no bloco <code>data</code> do arquivo <code>.stan</code>. É, essencialmente, a ponte entre o ambiente do R e o modelo especificado no Stan.</li>
+<li><code>pars</code>: permite especificar quais parâmetros o algoritmo de estimação deve retornar. Caso não seja especificado, o Stan retorna todos os parâmetros declarados no bloco <code>parameters</code> por padrão.</li>
+<li><code>seed</code>: define a semente utilizada para a geração dos valores iniciais e dos sorteios ao longo do algoritmo. É importante destacar que o Stan é um programa independente e utiliza seu próprio gerador de números aleatórios, separado do R. Por isso, definir uma semente na sessão do R com <code>set.seed()</code> não garante reprodutibilidade dos resultados do Stan — a semente deve ser definida diretamente no argumento <code>seed</code> da função de amostragem.</li>
+</ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
