@@ -769,25 +769,25 @@ $lp__
 <span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(resumo, head)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$alpha
-         media   mediana   hpd_min  hpd_max
-[1,] 0.3114655 0.3076813 0.2143437 0.411347
+         media  mediana   hpd_min   hpd_max
+[1,] 0.3095626 0.306817 0.2211923 0.4141712
 
 $sigma
-        media mediana hpd_min hpd_max
-[1,] 199.5324 195.324  103.06 315.328
+        media  mediana  hpd_min  hpd_max
+[1,] 197.7392 192.3962 98.25824 306.1298
 
 $S
          media   mediana   hpd_min   hpd_max
 [1,] 1.0000000 1.0000000 1.0000000 1.0000000
-[2,] 0.5800242 0.5781132 0.4767414 0.6853544
-[3,] 0.5099863 0.5071317 0.4214662 0.6067816
-[4,] 0.4663542 0.4634259 0.3862349 0.5564064
-[5,] 0.4344791 0.4318984 0.3580907 0.5156016
-[6,] 0.4093669 0.4069127 0.3352538 0.4816995
+[2,] 0.5781132 0.5749859 0.4707334 0.6803913
+[3,] 0.5083057 0.5048002 0.4178540 0.6041285
+[4,] 0.4648618 0.4613416 0.3831378 0.5511276
+[5,] 0.4331429 0.4299250 0.3577899 0.5124290
+[6,] 0.4081637 0.4053254 0.3401180 0.4835491
 
 $lp__
-        media   mediana   hpd_min   hpd_max
-[1,] -465.848 -465.5496 -467.8091 -464.8247</code></pre>
+         media   mediana   hpd_min   hpd_max
+[1,] -465.8091 -465.5016 -467.7441 -464.8247</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -850,7 +850,7 @@ $lp__
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meteobr)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>st <span class="ot">=</span> stations <span class="sc">|&gt;</span> <span class="fu">filter</span>(state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Rio de Janeiro"</span>, <span class="st">"Amazonas"</span>, <span class="st">"Pernambuco"</span>)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(station.id)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>st <span class="ot">=</span> stations <span class="sc">|&gt;</span> <span class="fu">filter</span>(state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Santa Catarina"</span>, <span class="st">"Amazonas"</span>, <span class="st">"Pernambuco"</span>)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(station.id)</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span></span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_data</span>(<span class="at">first.day =</span> <span class="st">"2025-01-01"</span>, <span class="at">last.day =</span> <span class="st">"2025-12-31"</span>, <span class="at">stations =</span> st, <span class="at">vars =</span> <span class="st">"temperature_air"</span>) <span class="sc">|&gt;</span></span>
@@ -870,7 +870,7 @@ $lp__
 <span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(estacao) <span class="sc">|&gt;</span></span>
 <span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
 <span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>df_wo_na <span class="ot">=</span> </span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>temperatura <span class="ot">=</span> </span>
 <span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span></span>
 <span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>estacao <span class="sc">%in%</span> st_w_na) <span class="sc">|&gt;</span></span>
 <span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">select</span>(stations,<span class="st">"station.id"</span>, <span class="st">"state"</span>, <span class="st">"lat"</span>, <span class="st">"lon"</span>), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"estacao"</span> <span class="ot">=</span> <span class="st">"station.id"</span>)) <span class="sc">|&gt;</span></span>
@@ -879,24 +879,24 @@ $lp__
 <span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(estado) <span class="sc">|&gt;</span></span>
 <span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(estado, estacao)</span>
 <span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(df_wo_na, <span class="st">"stuff/temperatura.csv"</span>, <span class="at">row.names =</span> F)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="co"># write.csv(temperatura, "stuff/temperatura.csv", row.names = F)</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>temperatura <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/temperatura.csv"</span>))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>temperatura <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/temperatura.csv"</span>), <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 20%">
+<col style="width: 21%">
+<col style="width: 11%">
 <col style="width: 10%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -904,14 +904,24 @@ $lp__
 <th style="text-align: left;">estacao</th>
 <th style="text-align: right;">lat</th>
 <th style="text-align: right;">lon</th>
-<th style="text-align: right;">X2025.01</th>
-<th style="text-align: right;">X2025.02</th>
-<th style="text-align: right;">X2025.03</th>
-<th style="text-align: right;">X2025.04</th>
+<th style="text-align: right;">2025/01</th>
+<th style="text-align: right;">2025/02</th>
+<th style="text-align: right;">2025/03</th>
+<th style="text-align: right;">2025/04</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td style="text-align: left;">Amazonas</td>
+<td style="text-align: left;">A112</td>
+<td style="text-align: right;">-7.55</td>
+<td style="text-align: right;">-63.07</td>
+<td style="text-align: right;">26.38</td>
+<td style="text-align: right;">26.26</td>
+<td style="text-align: right;">26.73</td>
+<td style="text-align: right;">26.51</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">Amazonas</td>
 <td style="text-align: left;">A110</td>
 <td style="text-align: right;">-8.78</td>
@@ -921,95 +931,35 @@ $lp__
 <td style="text-align: right;">26.31</td>
 <td style="text-align: right;">26.37</td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">Pernambuco</td>
-<td style="text-align: left;">A366</td>
-<td style="text-align: right;">-7.89</td>
-<td style="text-align: right;">-40.10</td>
-<td style="text-align: right;">26.42</td>
-<td style="text-align: right;">26.96</td>
-<td style="text-align: right;">27.50</td>
-<td style="text-align: right;">26.89</td>
-</tr>
 <tr class="odd">
 <td style="text-align: left;">Pernambuco</td>
-<td style="text-align: left;">A341</td>
-<td style="text-align: right;">-8.37</td>
-<td style="text-align: right;">-36.03</td>
-<td style="text-align: right;">22.58</td>
-<td style="text-align: right;">21.68</td>
-<td style="text-align: right;">22.25</td>
-<td style="text-align: right;">22.53</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Rio de Janeiro</td>
-<td style="text-align: left;">A601</td>
-<td style="text-align: right;">-22.76</td>
-<td style="text-align: right;">-43.68</td>
-<td style="text-align: right;">26.62</td>
-<td style="text-align: right;">28.98</td>
-<td style="text-align: right;">26.77</td>
-<td style="text-align: right;">24.03</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Rio de Janeiro</td>
-<td style="text-align: left;">A619</td>
-<td style="text-align: right;">-23.22</td>
-<td style="text-align: right;">-44.73</td>
-<td style="text-align: right;">25.52</td>
-<td style="text-align: right;">27.62</td>
-<td style="text-align: right;">25.67</td>
-<td style="text-align: right;">23.52</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Rio de Janeiro</td>
-<td style="text-align: left;">A621</td>
-<td style="text-align: right;">-22.86</td>
-<td style="text-align: right;">-43.41</td>
-<td style="text-align: right;">27.08</td>
-<td style="text-align: right;">29.50</td>
-<td style="text-align: right;">27.37</td>
-<td style="text-align: right;">24.24</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Rio de Janeiro</td>
-<td style="text-align: left;">A610</td>
-<td style="text-align: right;">-22.46</td>
-<td style="text-align: right;">-43.29</td>
-<td style="text-align: right;">16.61</td>
-<td style="text-align: right;">17.80</td>
-<td style="text-align: right;">16.32</td>
-<td style="text-align: right;">13.73</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Rio de Janeiro</td>
-<td style="text-align: left;">A624</td>
-<td style="text-align: right;">-22.33</td>
-<td style="text-align: right;">-42.68</td>
-<td style="text-align: right;">20.02</td>
-<td style="text-align: right;">20.54</td>
-<td style="text-align: right;">19.70</td>
-<td style="text-align: right;">17.73</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Rio de Janeiro</td>
-<td style="text-align: left;">A627</td>
-<td style="text-align: right;">-22.87</td>
-<td style="text-align: right;">-43.10</td>
-<td style="text-align: right;">27.80</td>
-<td style="text-align: right;">30.28</td>
+<td style="text-align: left;">A370</td>
+<td style="text-align: right;">-8.06</td>
+<td style="text-align: right;">-39.10</td>
 <td style="text-align: right;">27.75</td>
-<td style="text-align: right;">24.95</td>
+<td style="text-align: right;">28.13</td>
+<td style="text-align: right;">27.64</td>
+<td style="text-align: right;">27.17</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Rio de Janeiro</td>
-<td style="text-align: left;">A636</td>
-<td style="text-align: right;">-22.94</td>
-<td style="text-align: right;">-43.40</td>
-<td style="text-align: right;">27.35</td>
-<td style="text-align: right;">28.20</td>
-<td style="text-align: right;">26.15</td>
-<td style="text-align: right;">23.75</td>
+<td style="text-align: left;">Santa Catarina</td>
+<td style="text-align: left;">A867</td>
+<td style="text-align: right;">-28.93</td>
+<td style="text-align: right;">-49.50</td>
+<td style="text-align: right;">24.08</td>
+<td style="text-align: right;">25.94</td>
+<td style="text-align: right;">24.18</td>
+<td style="text-align: right;">20.16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Santa Catarina</td>
+<td style="text-align: left;">A864</td>
+<td style="text-align: right;">-26.39</td>
+<td style="text-align: right;">-50.36</td>
+<td style="text-align: right;">22.05</td>
+<td style="text-align: right;">23.21</td>
+<td style="text-align: right;">21.94</td>
+<td style="text-align: right;">18.26</td>
 </tr>
 </tbody>
 </table>
@@ -1134,7 +1084,7 @@ $lp__
 <span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span></span>
 <span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>  temperatura <span class="sc">|&gt;</span></span>
-<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"X"</span>))</span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"2"</span>))</span>
 <span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">list</span>(</span>
 <span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">X =</span> X,</span>
@@ -1166,8 +1116,8 @@ $lp__
 <pre><code> [1] ""                                                                                         
  [2] "SAMPLING FOR MODEL 'FA' NOW (CHAIN 1)."                                                   
  [3] "Chain 1: "                                                                                
- [4] "Chain 1: Gradient evaluation took 5.7e-05 seconds"                                        
- [5] "Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.57 seconds."
+ [4] "Chain 1: Gradient evaluation took 4.4e-05 seconds"                                        
+ [5] "Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.44 seconds."
  [6] "Chain 1: Adjust your expectations accordingly!"                                           
  [7] "Chain 1: "                                                                                
  [8] "Chain 1: "                                                                                
@@ -1213,7 +1163,7 @@ $lp__
 <div class="cell">
 <details class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(resumo<span class="sc">$</span>lambda[<span class="dv">1</span>,,<span class="st">"media"</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">ylab =</span> <span class="st">"escore"</span>, <span class="at">xlab =</span> <span class="st">"mês"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(resumo<span class="sc">$</span>lambda[<span class="dv">1</span>,,<span class="st">"media"</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">ylim =</span> <span class="fu">c</span>(.<span class="dv">8</span>,<span class="fl">1.8</span>), <span class="at">ylab =</span> <span class="st">"escore"</span>, <span class="at">xlab =</span> <span class="st">"mês"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(resumo<span class="sc">$</span>lambda[<span class="dv">2</span>,,<span class="st">"media"</span>], <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(resumo<span class="sc">$</span>lambda[<span class="dv">3</span>,,<span class="st">"media"</span>], <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend =</span> <span class="fu">names</span>(group.sizes), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"red"</span>, <span class="st">"blue"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">bty =</span> <span class="st">"n"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1249,14 +1199,21 @@ $lp__
 </div>
 </div>
 <div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>resumo<span class="sc">$</span>alpha[,,<span class="st">"media"</span>] <span class="sc">|&gt;</span> {\(.) .[.<span class="sc">!=</span><span class="dv">0</span>]}() <span class="sc">|&gt;</span> <span class="fu">quantile</span>(<span class="at">probs =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   0%  100% 
+11.68 17.39 </code></pre>
+</div>
+</div>
+<div class="cell">
 <details class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(resumo<span class="sc">$</span>sigma[,<span class="dv">1</span>,<span class="st">"media"</span>], <span class="at">type=</span><span class="st">"b"</span>, <span class="at">ylab =</span> <span class="st">"sigma"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(resumo<span class="sc">$</span>sigma[,<span class="dv">1</span>,<span class="st">"media"</span>], <span class="at">type=</span><span class="st">"b"</span>, <span class="at">ylab =</span> <span class="st">"sigma"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="models_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="models_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>

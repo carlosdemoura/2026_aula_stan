@@ -485,7 +485,6 @@ temperatura =
 
 ```{r}
 temperatura = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/temperatura.csv"), check.names = FALSE)
-  
 ```
 
 ```{r}
@@ -628,7 +627,7 @@ X =
   temperatura |>
   select(starts_with("2"))
 
-data = list(
+data_FA = list(
   X = X,
   n_row = nrow(X),
   n_col = ncol(X),
@@ -652,7 +651,7 @@ for (i in 1:n_chains) {
 
 ```{r}
 #| eval: false
-fit_FA = sampling(mod_FA, data = data, chains = n_chains, init = init, seed = 12345)
+fit_FA = sampling(mod_FA, data = data_FA, chains = n_chains, init = init, seed = 12345)
 ```
 
 ```{r}
@@ -707,6 +706,10 @@ resumo$alpha[,,"media"] |>
   scale_y_reverse() +
   theme_minimal()
 ```
+```{r}
+resumo$alpha[,,"media"] |> {\(.) .[.!=0]}() |> quantile(probs = c(0,1)) |> round(2)
+```
+
 
 ```{r}
 #| code-fold: true

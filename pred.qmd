@@ -2,6 +2,17 @@
 title: "Sobre predições"
 ---
 
+```{r}
+#| include: false
+
+library(tidyverse)
+library(rstan)
+library(coda)
+library(survival)
+library(posterior)
+library(shinystan)
+```
+
 ## Predições no STAN
 
 > Bayesian models are generative, meaning they can be used to simulate observations just as well as they can be used to estimate parameters. One benefit of this fact is that a statistical model can be developed by thinking hard about how the data might have arisen.”
@@ -9,3 +20,302 @@ title: "Sobre predições"
 > — Richard McElreath, *Statistical Rethinking: A Bayesian Course with Examples in R and Stan* (2020)
 
 Predições como parâmetro vs. generated quantites
+
+## GLM
+
+```{r}
+#| code-fold: true
+#| eval: false
+#| code-summary: "Como obter os dados dos estudantes"
+
+# Dados retirados do Kaggle
+# https://www.kaggle.com/datasets/ssssws/student-exam-performance-dataset
+
+set.seed(12345)
+estudantes =
+  rsample::initial_split(read.csv("~/Downloads/student_exam_performance_dataset.csv"), prop = 0.2, strata = pass_fail) |>
+  rsample::training() |>
+  mutate(
+    pass_fail = as.numeric(pass_fail == "Pass")
+  ) |>
+  rename(pass = "pass_fail") |>
+  select(-c(student_id, gender, age, grade_category, science_score, final_exam_score, math_score, reading_score, writing_score, previous_gpa))
+
+write.csv(estudantes, "stuff/estudantes.csv", row.names = F)
+```
+
+
+```{r}
+library(rsample)
+
+estudantes = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/estudantes.csv"))
+
+set.seed(12345)
+split = initial_split(estudantes, prop = 0.8, strata = pass)
+estudantes_treino = training(split)
+estudantes_teste  = testing(split)
+```
+
+```stan
+transformed parameters {
+  vector[n_obs] eta_obs;
+  vector[n_pred] mu_pred;
+  eta_obs = X_obs * beta;
+  mu_pred = inv_logit(X_pred * beta);
+}
+model {
+  Y ~ bernoulli_logit(eta_obs);
+  beta ~ normal(0,1);
+}
+```
+
+```{r}
+X_obs  = model.matrix(pass ~ ., data = estudantes_treino)
+X_pred = model.matrix(pass ~ ., data = estudantes_teste)
+
+data_GLM_pred =
+  list(
+    n_obs  = nrow(X_obs),
+    n_pred = nrow(X_pred),
+    p      = ncol(X_obs),
+    X_obs  = X_obs,
+    X_pred = X_pred,
+    Y = estudantes_treino$pass
+  )
+```
+
+
+```{r}
+#| code-fold: true
+#| eval: false
+mod_GLM_pred = stan_model(model_name = "GLM_pred", model_code = "
+data {
+  int<lower=1> n_obs;
+  int<lower=0> n_pred;
+  int<lower=1> p;
+  matrix[n_obs, p] X_obs;
+  matrix[n_pred, p] X_pred;
+  int<lower=0, upper=1> Y[n_obs];
+}
+parameters {
+  vector[p] beta;
+}
+transformed parameters {
+  vector[n_obs] eta_obs;
+  vector[n_pred] mu_pred;
+  eta_obs = X_obs * beta;
+  mu_pred = inv_logit(X_pred * beta);
+}
+model {
+  Y ~ bernoulli_logit(eta_obs);
+  beta ~ normal(0,1);
+}
+
+")
+
+# saveRDS(mod_GLM_pred, "stuff/mod_GLM_pred.rds", compress = "xz")
+```
+
+```{r}
+#| echo: false
+mod_GLM_pred = readRDS("stuff/mod_GLM_pred.rds")
+```
+
+
+```{r}
+#| eval: false
+fit_GLM_pred = rstan::sampling(mod_GLM_pred, data = data_GLM_pred, chains = 1, seed = 12345)
+```
+
+```{r}
+#| echo: false
+out = capture.output({fit_GLM_pred = rstan::sampling(mod_GLM_pred, data = data_GLM_pred, chains = 1, seed = 12345)})
+out[1:20]
+```
+
+```{r}
+#| code-fold: true
+estudantes_teste |>
+  select(pass) |>
+  mutate(
+    mu_pred = extract(fit_GLM_pred, pars = "mu_pred") |> purrr::pluck("mu_pred") |> apply(2, mean)
+  ) |>
+  with(boxplot(mu_pred ~ pass))
+```
+
+## FA
+
+```{r}
+temperatura = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/temperatura.csv"), check.names = FALSE)
+
+n.pred = floor(.2 * nrow(temperatura) * 12)
+
+set.seed(12345)
+coor.missing =
+  cbind(
+    sample(1:nrow(temperatura), n.pred, replace = T),
+    sample(1:12, n.pred, replace = T)
+    ) |>
+  unique()
+n.pred = nrow(coor.missing)
+
+is.missing = matrix(0, nrow = nrow(temperatura), ncol = 12)
+is.missing[coor.missing] = 1:nrow(coor.missing)
+```
+
+
+```stan
+transformed parameters {
+  ...
+  
+  for (i in 1:n_row) { for (j in 1:n_col) {
+    if (is_missing[i,j] == 0) {
+      pred[i,j] = 0;
+    } else {
+      pred[i,j] = pred_[is_missing[i,j]];
+    }
+  }}
+}
+model {
+  ...
+  for(i in 1:n_row){ for (j in 1:n_col) {
+    if (is_missing[i,j] == 0) {
+      X[i,j] ~ normal( alpha_lambda[i,j], sigma[i,1] );
+    } else {
+      pred[i,j] ~ normal( alpha_lambda[i,j], sigma[i,1] );
+    }
+  }}
+  ...
+}
+```
+
+
+```{r}
+#| eval: false
+#| code-fold: true
+mod_FA_pred = stan_model(model_name = "FA_pred", model_code = "
+data {
+  int<lower=1> n_row;
+  int<lower=1> n_col;
+  int<lower=1> n_fac;
+  matrix[n_row, n_col] X;
+  int<lower=1> n_alpha_free;
+  real<lower=0> sigma_shape;
+  real<lower=0> sigma_rate;
+  int<lower=0> alpha_status[n_row, n_fac];
+  int<lower=0> n_pred;
+  int<lower=0> is_missing[n_row, n_col];
+}
+parameters {
+  vector[n_alpha_free] alpha_;
+  matrix[n_fac, n_col] lambda;
+  matrix<lower=0>[n_row,1] sigma;
+  vector[n_pred] pred_;
+}
+transformed parameters {
+  matrix[n_row, n_fac] alpha;
+  matrix[n_row, n_col] pred;
+  
+  for (i in 1:n_row) { for (k in 1:n_fac) {
+    if (alpha_status[i,k] == 0) {
+      alpha[i,k] = 0;
+    } else {
+      alpha[i,k] = alpha_[alpha_status[i,k]];
+    }
+  }}
+  
+  for (i in 1:n_row) { for (j in 1:n_col) {
+    if (is_missing[i,j] == 0) {
+      pred[i,j] = 0;
+    } else {
+      pred[i,j] = pred_[is_missing[i,j]];
+    }
+  }}
+}
+model {
+  matrix[n_row, n_col] alpha_lambda;
+  alpha_lambda = alpha * lambda;
+  for(i in 1:n_row){ for (j in 1:n_col) {
+    if (is_missing[i,j] == 0) {
+      X[i,j] ~ normal( alpha_lambda[i,j], sigma[i,1] );
+    } else {
+      pred[i,j] ~ normal( alpha_lambda[i,j], sigma[i,1] );
+    }
+  }}
+  for(i in 1:n_alpha_free) {
+    alpha_[i] ~ normal(0,10);
+  }
+  for (i in 1:n_fac) { for(j in 1:n_col){ 
+    lambda[i,j] ~ normal(0,1);
+  }}
+  for(i in 1:n_row){
+    sigma[i,1] ~ gamma(sigma_shape, sigma_rate);
+  }
+}
+
+")
+
+# saveRDS(mod_FA_pred, "stuff/mod_FA_pred.rds", compress = "xz")
+```
+
+```{r}
+#| echo: false
+mod_FA_pred = readRDS("stuff/mod_FA_pred.rds")
+```
+
+```{r}
+#| code-fold: true
+group.sizes =
+  temperatura |>
+  pull(estado) |>
+  table()
+
+n = sum(group.sizes)
+n.fac = 3
+
+group.limits =
+  group.sizes |>
+  {\(x) list(
+    c(1, (cumsum(x) + 1)[1:(length(x)-1)])[1:length(x)],
+    cumsum(x)
+  )}()
+
+contr = matrix(0, nrow = n, ncol = n.fac)
+for (i in 1:n.fac) {
+  contr[group.limits[[1]][i] : group.limits[[2]][i], i] = rep(1, group.sizes[i])
+}
+
+contr[contr!=0] = 1:sum(contr!=0)
+
+X =
+  temperatura |>
+  select(starts_with("2"))
+
+data_FA_pred = list(
+  X = X,
+  n_row = nrow(X),
+  n_col = ncol(X),
+  n_fac = 3,
+  n_alpha_free = max(contr),
+  sigma_shape = .1,
+  sigma_rate  = .1,
+  alpha_status = contr,
+  is_missing = is.missing,
+  n_pred = n.pred
+)
+
+init = list()
+n_chains = 1
+for (i in 1:n_chains) {
+  init[[i]] = list(
+    alpha_ = rep(10, data$n_alpha_free),
+    lambda = matrix(0, data$n_fac, data$n_col),
+    sigma  = matrix(1, data$n_row, 1)
+  )
+}
+```
+
+```{r}
+fit_FA_pred = rstan::sampling(mod_FA_pred, data = data_FA_pred, init = init, chains = n_chains)
+```
+

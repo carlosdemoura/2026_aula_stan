@@ -33,7 +33,7 @@ Este é o [material auxiliar](https://github.com/carlosdemoura/2026_aula_stan_da
 pacotes_instalados = installed.packages()[,"Package"]
 if (!"pak" %in% pacotes_instalados) install.packages("pak")
 
-pacotes_necessarios = c("tidyverse", "rstan", "coda", "posterior", "shinystan", "survival", "broom")
+pacotes_necessarios = c("tidyverse", "rstan", "coda", "posterior", "shinystan", "survival", "broom", "rsample")
 
 pacotes_necessarios |>
   setdiff(pacotes_instalados) |>
