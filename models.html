@@ -495,7 +495,7 @@ fit_GLM = rstan::sampling(mod_GLM, data = data_GLM)
 </div>
 <p>O modelo é especificado da seguinte forma:</p>
 <p><span class="math display">\[Y_i \sim \text{Poisson}(\mu_i)\]</span></p>
-<p><span class="math display">\[\log(\mu_i) = \log(n_i) + \beta_0 + \beta_{\text{idade}[i]} + \gamma_{\text{cidade}[i]}\]</span></p>
+<p><span class="math display">\[\log(\mu_i) = \log(n_i) + \beta_0 + \beta_{\text{age}[i]} + \beta_{\text{city}[i]}\]</span></p>
 <p>Para todos os coeficientes do preditor linear foi adotada a mesma priori vaga: <span class="math inline">\(\beta_i \sim N(0,10)\)</span>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n;</span>
@@ -782,8 +782,8 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 <pre><code>
 SAMPLING FOR MODEL 'surv_weib' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 1.1e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
+Chain 1: Gradient evaluation took 1e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -842,24 +842,24 @@ $lp__
 <div class="cell-output cell-output-stdout">
 <pre><code>$alpha
          media  mediana   hpd_min   hpd_max
-[1,] 0.3076674 0.303284 0.2146824 0.4189463
+[1,] 0.3103742 0.306533 0.2182022 0.4159945
 
 $sigma
         media mediana  hpd_min  hpd_max
-[1,] 195.5883 189.809 91.63133 305.9038
+[1,] 197.4404 191.309 94.22619 312.3663
 
 $S
          media   mediana   hpd_min   hpd_max
 [1,] 1.0000000 1.0000000 1.0000000 1.0000000
-[2,] 0.5757395 0.5729546 0.4756732 0.6937362
-[3,] 0.5062755 0.5028072 0.4109795 0.6031665
-[4,] 0.4630745 0.4595308 0.3771913 0.5498084
-[5,] 0.4315437 0.4278907 0.3551371 0.5127364
-[6,] 0.4067175 0.4033479 0.3356832 0.4818058
+[2,] 0.5782794 0.5751835 0.4673560 0.6873508
+[3,] 0.5084089 0.5046141 0.4134467 0.6109048
+[4,] 0.4649055 0.4609336 0.3736235 0.5528048
+[5,] 0.4331340 0.4291061 0.3519409 0.5165523
+[6,] 0.4081083 0.4042330 0.3369573 0.4891514
 
 $lp__
-         media   mediana   hpd_min   hpd_max
-[1,] -465.8611 -465.5799 -467.8909 -464.8251</code></pre>
+        media   mediana   hpd_min   hpd_max
+[1,] -465.836 -465.5263 -467.8494 -464.8247</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1207,8 +1207,8 @@ $lp__
 <pre><code>
 SAMPLING FOR MODEL 'FA' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 4.8e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.48 seconds.
+Chain 1: Gradient evaluation took 4.1e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.41 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
