@@ -451,14 +451,10 @@ pak::pak("carlosdemoura/meteobr")
 library(meteobr)
 library(tidyverse)
 
-st = stations |> filter(state == "Minas Gerais") |> pull(station.id)
-ibge =
-  readxl::read_xls("~/Downloads/DTB_2024(1)/RELATORIO_DTB_BRASIL_2024_MUNICIPIOS.xls", skip=6) |>
-  select(`Código Município Completo`, `Região Geográfica Intermediária`) |>
-  `colnames<-`(c("town.id", "regiao"))
+st = stations |> filter(state %in% c("Santa Catarina", "Amazonas", "Pernambuco")) |> pull(station.id)
+
 df =
   get_data(first.day = "2025-01-01", last.day = "2025-12-31", stations = st, vars = "temperature_air") |>
-  filter(station %in% st) |>
   mutate(
     time = substr(time,1,7)
   ) |>
@@ -475,40 +471,31 @@ st_w_na =
   pull(estacao) |>
   unique()
 
-df_wo_na = 
+temperatura = 
   df |>
   filter(!estacao %in% st_w_na) |>
-  left_join(select(stations,"station.id", "town.id", "lat", "lon"), by = c("estacao" = "station.id")) |>
-  left_join(ibge, by = "town.id") |>
-  mutate(
-    regiao = case_when(
-      regiao %in% c("3102", "3103", "3104", "3112") ~ "NORTE",
-      regiao %in% c("3110", "3111") ~ "TRIANGULO",
-      TRUE ~ "SUL"
-    )
-  ) |>
-  select(-town.id) |>
+  left_join(select(stations,"station.id", "state", "lat", "lon"), by = c("estacao" = "station.id")) |>
+  rename(estado = "state") |>
   pivot_wider(values_from = "temp", names_from = "mes") |>
-  relocate(regiao) |>
-  arrange(regiao, estacao)
+  relocate(estado) |>
+  arrange(estado, estacao)
 
-write.csv(df_wo_na, "stuff/temperatura.csv", row.names = F)
+# write.csv(temperatura, "stuff/temperatura.csv", row.names = F)
 ```
 
 ```{r}
-temperatura = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/temperatura.csv"))
+temperatura = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/temperatura.csv"), check.names = FALSE)
+  
 ```
 
 ```{r}
 #| echo: false
-set.seed(12345)
+set.seed(123452)
 temperatura[, 1:8] |>
-    sample_n(10) |>
-    arrange(regiao) |>
+    sample_n(5) |>
+    arrange(estado) |>
     knitr::kable(digits=2)
 ```
-
-![Regiões de MG](https://upload.wikimedia.org/wikipedia/commons/8/8e/Regi%C3%B5es_Geogr%C3%A1ficas_Intermedi%C3%A1rias_e_Regi%C3%B5es_Geogr%C3%A1ficas_Imediatas_do_estado_de_Minas_Gerais%2C_Brasil.png){width=50%}
 
 
 ```stan
@@ -518,14 +505,14 @@ data {
   int<lower=1> n_fac;
   matrix[n_row, n_col] X;
   int<lower=1> n_alpha_free;
-  real<lower=0> sigma2_shape;
-  real<lower=0> sigma2_rate;
+  real<lower=0> sigma_shape;
+  real<lower=0> sigma_rate;
   int<lower=0> alpha_status[n_row, n_fac];
 }
 parameters {
   vector[n_alpha_free] alpha_;
-  matrix[2, n_col] lambda;
-  matrix<lower=0>[n_row,1] sigma2;
+  matrix[n_fac, n_col] lambda;
+  matrix<lower=0>[n_row,1] sigma;
 }
 transformed parameters {
   matrix[n_row, n_fac] alpha;
@@ -541,28 +528,84 @@ model {
   matrix[n_row, n_col] alpha_lambda;
   alpha_lambda = alpha * lambda;
   for(i in 1:n_row){ for (j in 1:n_col) {
-    X[i,j] ~ normal( alpha_lambda[i,j], sqrt(sigma2[i,1]) );
+    X[i,j] ~ normal( alpha_lambda[i,j], sigma[i,1] );
   }}
   for(i in 1:n_alpha_free) {
     alpha_[i] ~ normal(0,10);
   }
-  for(i in 1:n_row){
-    sigma2[i,1] ~ gamma(sigma2_shape, sigma2_rate);
-  }
-  for (k in 1:n_fac) { for(j in 1:n_col){ 
-    lambda[k,j] ~ normal(0, 1);
+  for (i in 1:n_fac) { for(j in 1:n_col){ 
+    lambda[i,j] ~ normal(0,1);
   }}
+  for(i in 1:n_row){
+    sigma[i,1] ~ gamma(sigma_shape, sigma_rate);
+  }
 }
+
 ```
 
+```{r}
+#| eval: false
+#| code-fold: true
+mod_FA = stan_model(model_name = "FA", model_code = "
+data {
+  int<lower=1> n_row;
+  int<lower=1> n_col;
+  int<lower=1> n_fac;
+  matrix[n_row, n_col] X;
+  int<lower=1> n_alpha_free;
+  real<lower=0> sigma_shape;
+  real<lower=0> sigma_rate;
+  int<lower=0> alpha_status[n_row, n_fac];
+}
+parameters {
+  vector[n_alpha_free] alpha_;
+  matrix[n_fac, n_col] lambda;
+  matrix<lower=0>[n_row,1] sigma;
+}
+transformed parameters {
+  matrix[n_row, n_fac] alpha;
+  for (i in 1:n_row) { for (k in 1:n_fac) {
+    if (alpha_status[i,k] == 0) {
+      alpha[i,k] = 0;
+    } else {
+      alpha[i,k] = alpha_[alpha_status[i,k]];
+    }
+  }}
+}
+model {
+  matrix[n_row, n_col] alpha_lambda;
+  alpha_lambda = alpha * lambda;
+  for(i in 1:n_row){ for (j in 1:n_col) {
+    X[i,j] ~ normal( alpha_lambda[i,j], sigma[i,1] );
+  }}
+  for(i in 1:n_alpha_free) {
+    alpha_[i] ~ normal(0,10);
+  }
+  for (i in 1:n_fac) { for(j in 1:n_col){ 
+    lambda[i,j] ~ normal(0,1);
+  }}
+  for(i in 1:n_row){
+    sigma[i,1] ~ gamma(sigma_shape, sigma_rate);
+  }
+}
+
+")
+
+# saveRDS(mod_FA, "stuff/mod_FA.rds", compress = "xz")
+```
+
+```{r}
+#| echo: false
+
+mod_FA = readRDS("stuff/mod_FA.rds")
+```
 
 ```{r}
 #| code-fold: true
 group.sizes =
   temperatura |>
-  pull(regiao) |>
-  table() |>
-  unname()
+  pull(estado) |>
+  table()
 
 n = sum(group.sizes)
 n.fac = 3
@@ -583,7 +626,7 @@ contr[contr!=0] = 1:sum(contr!=0)
 
 X =
   temperatura |>
-  select(starts_with("X"))
+  select(starts_with("2"))
 
 data = list(
   X = X,
@@ -591,9 +634,81 @@ data = list(
   n_col = ncol(X),
   n_fac = 3,
   n_alpha_free = max(contr),
-  sigma2_shape = .1,
-  sigma2_rate  = .1,
+  sigma_shape = .1,
+  sigma_rate  = .1,
   alpha_status = contr
 )
+
+init = list()
+n_chains = 2
+for (i in 1:n_chains) {
+  init[[i]] = list(
+    alpha_ = rep(10, data$n_alpha_free),
+    lambda = matrix(0, data$n_fac, data$n_col),
+    sigma  = matrix(1, data$n_row, 1)
+  )
+}
 ```
 
+```{r}
+#| eval: false
+fit_FA = sampling(mod_FA, data = data, chains = n_chains, init = init, seed = 12345)
+```
+
+```{r}
+#| echo: false
+out = capture.output({fit_FA = sampling(mod_FA, data = data, chains = n_chains, init = init, seed = 12345)})
+out[1:20]
+```
+
+
+```{r}
+#| code-fold: true
+post = rstan::extract(fit_FA, pars = c("alpha", "lambda", "sigma"))
+resumo = list()
+
+for ( parameter in names(post) ) {
+  hpd_temp = apply( post[parameter][[1]], 2:3,
+                    function(x) {
+                      coda::HPDinterval(coda::as.mcmc(x))[,c("lower", "upper")] |>
+                        as.numeric()
+                    })
+  
+  resumo[[parameter]] = list(
+    "media"   = apply( post[parameter][[1]], 2:3, mean          )                   ,
+    "mediana" = apply( post[parameter][[1]], 2:3, stats::median )                   ,
+    "hpd_min" = apply( hpd_temp, 2:3, function(x) { unlist(x) |> purrr::pluck(1) }) ,
+    "hpd_max" = apply( hpd_temp, 2:3, function(x) { unlist(x) |> purrr::pluck(2) })
+  )
+}
+
+
+resumo = sapply(resumo, function(x) { abind::abind(x, along = 3) })
+```
+
+```{r}
+#| code-fold: true
+plot(resumo$lambda[1,,"media"], type="l", ylim = c(.8,1.8), ylab = "escore", xlab = "mês", lwd = 2)
+lines(resumo$lambda[2,,"media"], col = "red", lwd = 2)
+lines(resumo$lambda[3,,"media"], col = "blue", lwd = 2, lty = 2)
+legend("bottomright", legend = names(group.sizes), col = c("black", "red", "blue"), lty = c(1, 1, 2), lwd = 2, bty = "n")
+```
+
+```{r}
+#| code-fold: true
+resumo$alpha[,,"media"] |>
+  as.data.frame() |>
+  {\(.) `colnames<-`(., 1:ncol(.))}() |>
+  {\(.) dplyr::mutate(., row = as.numeric(rownames(.))) }() |>
+  tidyr::pivot_longer(cols = -row, names_to = "factor", values_to = "value") |>
+  ggplot(aes(.data$factor, .data$row, fill = .data$value)) +
+  geom_tile() +
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +
+  scale_y_reverse() +
+  theme_minimal()
+```
+
+```{r}
+#| code-fold: true
+plot(resumo$sigma[,1,"media"], type="b", ylab = "sigma", lwd = 2)
+```

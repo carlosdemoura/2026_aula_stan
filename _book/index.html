@@ -247,11 +247,16 @@ div.csl-indent {
 <section id="setup-do-ambiente" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="setup-do-ambiente">Setup do ambiente</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="st">"pak"</span> <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="st">"Package"</span>]) <span class="fu">install.packages</span>(<span class="st">"pak"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"tidyverse"</span>, <span class="st">"rstan"</span>, <span class="st">"coda"</span>, <span class="st">"posterior"</span>, <span class="st">"shinystan"</span>, <span class="st">"survival"</span>, <span class="st">"broom"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setdiff</span>(<span class="fu">installed.packages</span>()[,<span class="st">"Package"</span>]) <span class="sc">|&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  pak<span class="sc">::</span><span class="fu">pak</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacotes_instalados <span class="ot">=</span> <span class="fu">installed.packages</span>()[,<span class="st">"Package"</span>]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="st">"pak"</span> <span class="sc">%in%</span> pacotes_instalados) <span class="fu">install.packages</span>(<span class="st">"pak"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>pacotes_necessarios <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"tidyverse"</span>, <span class="st">"rstan"</span>, <span class="st">"coda"</span>, <span class="st">"posterior"</span>, <span class="st">"shinystan"</span>, <span class="st">"survival"</span>, <span class="st">"broom"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>pacotes_necessarios <span class="sc">|&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setdiff</span>(pacotes_instalados) <span class="sc">|&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  {\(.) <span class="cf">if</span> (<span class="fu">length</span>(.)) pak<span class="sc">::</span><span class="fu">pak</span>(.)}()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (pak <span class="cf">in</span> pacotes_necessarios) {<span class="fu">require</span>(pak, <span class="at">character.only =</span> T)}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="referências" class="level1 unnumbered">
