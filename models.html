@@ -769,25 +769,25 @@ $lp__
 <span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(resumo, head)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$alpha
-         media  mediana  hpd_min   hpd_max
-[1,] 0.3112458 0.307223 0.210955 0.4102451
+         media   mediana   hpd_min  hpd_max
+[1,] 0.3114655 0.3076813 0.2143437 0.411347
 
 $sigma
-        media mediana  hpd_min  hpd_max
-[1,] 199.1069 193.282 95.36486 312.4123
+        media mediana hpd_min hpd_max
+[1,] 199.5324 195.324  103.06 315.328
 
 $S
          media   mediana   hpd_min   hpd_max
 [1,] 1.0000000 1.0000000 1.0000000 1.0000000
-[2,] 0.5796361 0.5759192 0.4733481 0.6875917
-[3,] 0.5096627 0.5058828 0.4208912 0.6132597
-[4,] 0.4660708 0.4625976 0.3802567 0.5533426
-[5,] 0.4342247 0.4310742 0.3562785 0.5152212
-[6,] 0.4091348 0.4060198 0.3385033 0.4857461
+[2,] 0.5800242 0.5781132 0.4767414 0.6853544
+[3,] 0.5099863 0.5071317 0.4214662 0.6067816
+[4,] 0.4663542 0.4634259 0.3862349 0.5564064
+[5,] 0.4344791 0.4318984 0.3580907 0.5156016
+[6,] 0.4093669 0.4069127 0.3352538 0.4816995
 
 $lp__
-         media   mediana  hpd_min   hpd_max
-[1,] -465.8518 -465.5669 -467.861 -464.8248</code></pre>
+        media   mediana   hpd_min   hpd_max
+[1,] -465.848 -465.5496 -467.8091 -464.8247</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -850,48 +850,36 @@ $lp__
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meteobr)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>st <span class="ot">=</span> stations <span class="sc">|&gt;</span> <span class="fu">filter</span>(state <span class="sc">==</span> <span class="st">"Minas Gerais"</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(station.id)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>ibge <span class="ot">=</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  readxl<span class="sc">::</span><span class="fu">read_xls</span>(<span class="st">"~/Downloads/DTB_2024(1)/RELATORIO_DTB_BRASIL_2024_MUNICIPIOS.xls"</span>, <span class="at">skip=</span><span class="dv">6</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">Código Município Completo</span><span class="st">`</span>, <span class="st">`</span><span class="at">Região Geográfica Intermediária</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">colnames&lt;-</span><span class="st">`</span>(<span class="fu">c</span>(<span class="st">"town.id"</span>, <span class="st">"regiao"</span>))</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_data</span>(<span class="at">first.day =</span> <span class="st">"2025-01-01"</span>, <span class="at">last.day =</span> <span class="st">"2025-12-31"</span>, <span class="at">stations =</span> st, <span class="at">vars =</span> <span class="st">"temperature_air"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(station <span class="sc">%in%</span> st) <span class="sc">|&gt;</span></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">time =</span> <span class="fu">substr</span>(time,<span class="dv">1</span>,<span class="dv">7</span>)</span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(station, time) <span class="sc">|&gt;</span></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">temp =</span> <span class="fu">mean</span>(temperature_air, <span class="at">na.rm =</span> T),</span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">mes =</span> <span class="st">"time"</span>, <span class="at">estacao =</span> <span class="st">"station"</span>)</span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>st_w_na <span class="ot">=</span></span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span></span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(temp)) <span class="sc">|&gt;</span></span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(estacao) <span class="sc">|&gt;</span></span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>df_wo_na <span class="ot">=</span> </span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span></span>
-<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>estacao <span class="sc">%in%</span> st_w_na) <span class="sc">|&gt;</span></span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">select</span>(stations,<span class="st">"station.id"</span>, <span class="st">"town.id"</span>, <span class="st">"lat"</span>, <span class="st">"lon"</span>), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"estacao"</span> <span class="ot">=</span> <span class="st">"station.id"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ibge, <span class="at">by =</span> <span class="st">"town.id"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">regiao =</span> <span class="fu">case_when</span>(</span>
-<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>      regiao <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"3102"</span>, <span class="st">"3103"</span>, <span class="st">"3104"</span>, <span class="st">"3112"</span>) <span class="sc">~</span> <span class="st">"NORTE"</span>,</span>
-<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>      regiao <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"3110"</span>, <span class="st">"3111"</span>) <span class="sc">~</span> <span class="st">"TRIANGULO"</span>,</span>
-<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"SUL"</span></span>
-<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>town.id) <span class="sc">|&gt;</span></span>
-<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">values_from =</span> <span class="st">"temp"</span>, <span class="at">names_from =</span> <span class="st">"mes"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(regiao) <span class="sc">|&gt;</span></span>
-<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(regiao, estacao)</span>
-<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(df_wo_na, <span class="st">"stuff/temperatura.csv"</span>, <span class="at">row.names =</span> F)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>st <span class="ot">=</span> stations <span class="sc">|&gt;</span> <span class="fu">filter</span>(state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Rio de Janeiro"</span>, <span class="st">"Amazonas"</span>, <span class="st">"Pernambuco"</span>)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(station.id)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_data</span>(<span class="at">first.day =</span> <span class="st">"2025-01-01"</span>, <span class="at">last.day =</span> <span class="st">"2025-12-31"</span>, <span class="at">stations =</span> st, <span class="at">vars =</span> <span class="st">"temperature_air"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">time =</span> <span class="fu">substr</span>(time,<span class="dv">1</span>,<span class="dv">7</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(station, time) <span class="sc">|&gt;</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">temp =</span> <span class="fu">mean</span>(temperature_air, <span class="at">na.rm =</span> T),</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">mes =</span> <span class="st">"time"</span>, <span class="at">estacao =</span> <span class="st">"station"</span>)</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>st_w_na <span class="ot">=</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(temp)) <span class="sc">|&gt;</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(estacao) <span class="sc">|&gt;</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>df_wo_na <span class="ot">=</span> </span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>estacao <span class="sc">%in%</span> st_w_na) <span class="sc">|&gt;</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">select</span>(stations,<span class="st">"station.id"</span>, <span class="st">"state"</span>, <span class="st">"lat"</span>, <span class="st">"lon"</span>), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"estacao"</span> <span class="ot">=</span> <span class="st">"station.id"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">estado =</span> <span class="st">"state"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">values_from =</span> <span class="st">"temp"</span>, <span class="at">names_from =</span> <span class="st">"mes"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(estado) <span class="sc">|&gt;</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(estado, estacao)</span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(df_wo_na, <span class="st">"stuff/temperatura.csv"</span>, <span class="at">row.names =</span> F)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
@@ -901,18 +889,18 @@ $lp__
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 14%">
-<col style="width: 11%">
+<col style="width: 20%">
 <col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">regiao</th>
+<th style="text-align: left;">estado</th>
 <th style="text-align: left;">estacao</th>
 <th style="text-align: right;">lat</th>
 <th style="text-align: right;">lon</th>
@@ -924,114 +912,108 @@ $lp__
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">NORTE</td>
-<td style="text-align: left;">A549</td>
-<td style="text-align: right;">-15.75</td>
-<td style="text-align: right;">-41.46</td>
-<td style="text-align: right;">23.26</td>
-<td style="text-align: right;">23.09</td>
-<td style="text-align: right;">23.19</td>
-<td style="text-align: right;">22.47</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">NORTE</td>
-<td style="text-align: left;">A552</td>
-<td style="text-align: right;">-16.16</td>
-<td style="text-align: right;">-42.31</td>
-<td style="text-align: right;">25.27</td>
-<td style="text-align: right;">26.19</td>
-<td style="text-align: right;">26.69</td>
-<td style="text-align: right;">25.77</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">NORTE</td>
-<td style="text-align: left;">A543</td>
-<td style="text-align: right;">-14.91</td>
-<td style="text-align: right;">-42.81</td>
-<td style="text-align: right;">26.49</td>
-<td style="text-align: right;">27.88</td>
-<td style="text-align: right;">28.50</td>
+<td style="text-align: left;">Amazonas</td>
+<td style="text-align: left;">A110</td>
+<td style="text-align: right;">-8.78</td>
+<td style="text-align: right;">-67.33</td>
 <td style="text-align: right;">26.22</td>
+<td style="text-align: right;">26.03</td>
+<td style="text-align: right;">26.31</td>
+<td style="text-align: right;">26.37</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">SUL</td>
-<td style="text-align: left;">A513</td>
-<td style="text-align: right;">-20.56</td>
-<td style="text-align: right;">-43.76</td>
-<td style="text-align: right;">21.84</td>
-<td style="text-align: right;">22.77</td>
-<td style="text-align: right;">21.47</td>
-<td style="text-align: right;">19.79</td>
+<td style="text-align: left;">Pernambuco</td>
+<td style="text-align: left;">A366</td>
+<td style="text-align: right;">-7.89</td>
+<td style="text-align: right;">-40.10</td>
+<td style="text-align: right;">26.42</td>
+<td style="text-align: right;">26.96</td>
+<td style="text-align: right;">27.50</td>
+<td style="text-align: right;">26.89</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">SUL</td>
-<td style="text-align: left;">A516</td>
-<td style="text-align: right;">-20.75</td>
-<td style="text-align: right;">-46.63</td>
-<td style="text-align: right;">23.34</td>
-<td style="text-align: right;">24.11</td>
-<td style="text-align: right;">24.07</td>
-<td style="text-align: right;">21.85</td>
+<td style="text-align: left;">Pernambuco</td>
+<td style="text-align: left;">A341</td>
+<td style="text-align: right;">-8.37</td>
+<td style="text-align: right;">-36.03</td>
+<td style="text-align: right;">22.58</td>
+<td style="text-align: right;">21.68</td>
+<td style="text-align: right;">22.25</td>
+<td style="text-align: right;">22.53</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">SUL</td>
-<td style="text-align: left;">A510</td>
-<td style="text-align: right;">-20.76</td>
-<td style="text-align: right;">-42.86</td>
-<td style="text-align: right;">23.15</td>
-<td style="text-align: right;">23.23</td>
-<td style="text-align: right;">22.87</td>
-<td style="text-align: right;">21.07</td>
+<td style="text-align: left;">Rio de Janeiro</td>
+<td style="text-align: left;">A601</td>
+<td style="text-align: right;">-22.76</td>
+<td style="text-align: right;">-43.68</td>
+<td style="text-align: right;">26.62</td>
+<td style="text-align: right;">28.98</td>
+<td style="text-align: right;">26.77</td>
+<td style="text-align: right;">24.03</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">SUL</td>
-<td style="text-align: left;">A517</td>
-<td style="text-align: right;">-21.10</td>
-<td style="text-align: right;">-42.38</td>
-<td style="text-align: right;">25.62</td>
-<td style="text-align: right;">27.15</td>
-<td style="text-align: right;">25.55</td>
-<td style="text-align: right;">23.60</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">SUL</td>
-<td style="text-align: left;">A524</td>
-<td style="text-align: right;">-20.45</td>
-<td style="text-align: right;">-45.45</td>
-<td style="text-align: right;">23.35</td>
-<td style="text-align: right;">24.55</td>
-<td style="text-align: right;">24.01</td>
-<td style="text-align: right;">21.92</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">TRIANGULO</td>
-<td style="text-align: left;">A525</td>
-<td style="text-align: right;">-19.88</td>
-<td style="text-align: right;">-47.43</td>
-<td style="text-align: right;">23.55</td>
-<td style="text-align: right;">24.42</td>
-<td style="text-align: right;">24.42</td>
-<td style="text-align: right;">22.46</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">TRIANGULO</td>
-<td style="text-align: left;">A507</td>
-<td style="text-align: right;">-18.92</td>
-<td style="text-align: right;">-48.26</td>
-<td style="text-align: right;">24.24</td>
-<td style="text-align: right;">24.99</td>
+<td style="text-align: left;">Rio de Janeiro</td>
+<td style="text-align: left;">A619</td>
+<td style="text-align: right;">-23.22</td>
+<td style="text-align: right;">-44.73</td>
 <td style="text-align: right;">25.52</td>
-<td style="text-align: right;">23.88</td>
+<td style="text-align: right;">27.62</td>
+<td style="text-align: right;">25.67</td>
+<td style="text-align: right;">23.52</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rio de Janeiro</td>
+<td style="text-align: left;">A621</td>
+<td style="text-align: right;">-22.86</td>
+<td style="text-align: right;">-43.41</td>
+<td style="text-align: right;">27.08</td>
+<td style="text-align: right;">29.50</td>
+<td style="text-align: right;">27.37</td>
+<td style="text-align: right;">24.24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rio de Janeiro</td>
+<td style="text-align: left;">A610</td>
+<td style="text-align: right;">-22.46</td>
+<td style="text-align: right;">-43.29</td>
+<td style="text-align: right;">16.61</td>
+<td style="text-align: right;">17.80</td>
+<td style="text-align: right;">16.32</td>
+<td style="text-align: right;">13.73</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rio de Janeiro</td>
+<td style="text-align: left;">A624</td>
+<td style="text-align: right;">-22.33</td>
+<td style="text-align: right;">-42.68</td>
+<td style="text-align: right;">20.02</td>
+<td style="text-align: right;">20.54</td>
+<td style="text-align: right;">19.70</td>
+<td style="text-align: right;">17.73</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rio de Janeiro</td>
+<td style="text-align: left;">A627</td>
+<td style="text-align: right;">-22.87</td>
+<td style="text-align: right;">-43.10</td>
+<td style="text-align: right;">27.80</td>
+<td style="text-align: right;">30.28</td>
+<td style="text-align: right;">27.75</td>
+<td style="text-align: right;">24.95</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rio de Janeiro</td>
+<td style="text-align: left;">A636</td>
+<td style="text-align: right;">-22.94</td>
+<td style="text-align: right;">-43.40</td>
+<td style="text-align: right;">27.35</td>
+<td style="text-align: right;">28.20</td>
+<td style="text-align: right;">26.15</td>
+<td style="text-align: right;">23.75</td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Regi%C3%B5es_Geogr%C3%A1ficas_Intermedi%C3%A1rias_e_Regi%C3%B5es_Geogr%C3%A1ficas_Imediatas_do_estado_de_Minas_Gerais%2C_Brasil.png" class="img-fluid figure-img" style="width:50.0%"></p>
-<figcaption>Regiões de MG</figcaption>
-</figure>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_row;</span>
@@ -1039,14 +1021,14 @@ $lp__
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_fac;</span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[n_row, n_col] X;</span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_alpha_free;</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma2_shape;</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma2_rate;</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_shape;</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_rate;</span>
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; alpha_status[n_row, n_fac];</span>
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
 <span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[n_alpha_free] alpha_;</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[<span class="dv">2</span>, n_col] lambda;</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[n_row,<span class="dv">1</span>] sigma2;</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[n_fac, n_col] lambda;</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[n_row,<span class="dv">1</span>] sigma;</span>
 <span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
 <span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[n_row, n_fac] alpha;</span>
@@ -1062,18 +1044,223 @@ $lp__
 <span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[n_row, n_col] alpha_lambda;</span>
 <span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>  alpha_lambda = alpha * lambda;</span>
 <span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_row){ <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span>:n_col) {</span>
-<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>    X[i,j] ~ normal( alpha_lambda[i,j], sqrt(sigma2[i,<span class="dv">1</span>]) );</span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>    X[i,j] ~ normal( alpha_lambda[i,j], sigma[i,<span class="dv">1</span>] );</span>
 <span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>  }}</span>
 <span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_alpha_free) {</span>
 <span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>    alpha_[i] ~ normal(<span class="dv">0</span>,<span class="dv">10</span>);</span>
 <span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_row){</span>
-<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>    sigma2[i,<span class="dv">1</span>] ~ gamma(sigma2_shape, sigma2_rate);</span>
-<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span>:n_fac) { <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span>:n_col){ </span>
-<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>    lambda[k,j] ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>  }}</span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:n_fac) { <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span>:n_col){ </span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>    lambda[i,j] ~ normal(<span class="dv">0</span>,<span class="dv">1</span>);</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>  }}</span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_row){</span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>    sigma[i,<span class="dv">1</span>] ~ gamma(sigma_shape, sigma_rate);</span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mod_FA <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="at">model_name =</span> <span class="st">"FA"</span>, <span class="at">model_code =</span> <span class="st">"</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="st">data {</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="st">  int&lt;lower=1&gt; n_row;</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="st">  int&lt;lower=1&gt; n_col;</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="st">  int&lt;lower=1&gt; n_fac;</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="st">  matrix[n_row, n_col] X;</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="st">  int&lt;lower=1&gt; n_alpha_free;</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="st">  real&lt;lower=0&gt; sigma_shape;</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="st">  real&lt;lower=0&gt; sigma_rate;</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="st">  int&lt;lower=0&gt; alpha_status[n_row, n_fac];</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="st">parameters {</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="st">  vector[n_alpha_free] alpha_;</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="st">  matrix[n_fac, n_col] lambda;</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="st">  matrix&lt;lower=0&gt;[n_row,1] sigma;</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="st">transformed parameters {</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="st">  matrix[n_row, n_fac] alpha;</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="st">  for (i in 1:n_row) { for (k in 1:n_fac) {</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="st">    if (alpha_status[i,k] == 0) {</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="st">      alpha[i,k] = 0;</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="st">    } else {</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a><span class="st">      alpha[i,k] = alpha_[alpha_status[i,k]];</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="st">    }</span></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a><span class="st">  }}</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a><span class="st">model {</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a><span class="st">  matrix[n_row, n_col] alpha_lambda;</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a><span class="st">  alpha_lambda = alpha * lambda;</span></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a><span class="st">  for(i in 1:n_row){ for (j in 1:n_col) {</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a><span class="st">    X[i,j] ~ normal( alpha_lambda[i,j], sigma[i,1] );</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a><span class="st">  }}</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a><span class="st">  for(i in 1:n_alpha_free) {</span></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a><span class="st">    alpha_[i] ~ normal(0,10);</span></span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a><span class="st">  for (i in 1:n_fac) { for(j in 1:n_col){ </span></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a><span class="st">    lambda[i,j] ~ normal(0,1);</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a><span class="st">  }}</span></span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a><span class="st">  for(i in 1:n_row){</span></span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a><span class="st">    sigma[i,1] ~ gamma(sigma_shape, sigma_rate);</span></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a><span class="co"># saveRDS(mod_FA, "stuff/mod_FA.rds", compress = "xz")</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>group.sizes <span class="ot">=</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  temperatura <span class="sc">|&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(estado) <span class="sc">|&gt;</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">sum</span>(group.sizes)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>n.fac <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>group.limits <span class="ot">=</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  group.sizes <span class="sc">|&gt;</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  {\(x) <span class="fu">list</span>(</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">1</span>, (<span class="fu">cumsum</span>(x) <span class="sc">+</span> <span class="dv">1</span>)[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(x)<span class="sc">-</span><span class="dv">1</span>)])[<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)],</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cumsum</span>(x)</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  )}()</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>contr <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> n, <span class="at">ncol =</span> n.fac)</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.fac) {</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>  contr[group.limits[[<span class="dv">1</span>]][i] <span class="sc">:</span> group.limits[[<span class="dv">2</span>]][i], i] <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">1</span>, group.sizes[i])</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>contr[contr<span class="sc">!=</span><span class="dv">0</span>] <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">sum</span>(contr<span class="sc">!=</span><span class="dv">0</span>)</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>  temperatura <span class="sc">|&gt;</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"X"</span>))</span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">X =</span> X,</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_row =</span> <span class="fu">nrow</span>(X),</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_col =</span> <span class="fu">ncol</span>(X),</span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_fac =</span> <span class="dv">3</span>,</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_alpha_free =</span> <span class="fu">max</span>(contr),</span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">sigma_shape =</span> .<span class="dv">1</span>,</span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">sigma_rate  =</span> .<span class="dv">1</span>,</span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha_status =</span> contr</span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a>init <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a>n_chains <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_chains) {</span>
+<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a>  init[[i]] <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha_ =</span> <span class="fu">rep</span>(<span class="dv">10</span>, data<span class="sc">$</span>n_alpha_free),</span>
+<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">lambda =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, data<span class="sc">$</span>n_fac, data<span class="sc">$</span>n_col),</span>
+<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma  =</span> <span class="fu">matrix</span>(<span class="dv">1</span>, data<span class="sc">$</span>n_row, <span class="dv">1</span>)</span>
+<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>fit_FA <span class="ot">=</span> <span class="fu">sampling</span>(mod_FA, <span class="at">data =</span> data, <span class="at">chains =</span> n_chains, <span class="at">init =</span> init, <span class="at">seed =</span> <span class="dv">12345</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] ""                                                                                         
+ [2] "SAMPLING FOR MODEL 'FA' NOW (CHAIN 1)."                                                   
+ [3] "Chain 1: "                                                                                
+ [4] "Chain 1: Gradient evaluation took 5.7e-05 seconds"                                        
+ [5] "Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.57 seconds."
+ [6] "Chain 1: Adjust your expectations accordingly!"                                           
+ [7] "Chain 1: "                                                                                
+ [8] "Chain 1: "                                                                                
+ [9] "Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)"                                         
+[10] "Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)"                                         
+[11] "Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)"                                         
+[12] "Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)"                                         
+[13] "Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)"                                         
+[14] "Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)"                                         
+[15] "Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)"                                       
+[16] "Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)"                                       
+[17] "Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)"                                       
+[18] "Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)"                                       
+[19] "Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)"                                       
+[20] "Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)"                                       </code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>post <span class="ot">=</span> rstan<span class="sc">::</span><span class="fu">extract</span>(fit_FA, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"alpha"</span>, <span class="st">"lambda"</span>, <span class="st">"sigma"</span>))</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>resumo <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ( parameter <span class="cf">in</span> <span class="fu">names</span>(post) ) {</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  hpd_temp <span class="ot">=</span> <span class="fu">apply</span>( post[parameter][[<span class="dv">1</span>]], <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(x) {</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>                      coda<span class="sc">::</span><span class="fu">HPDinterval</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(x))[,<span class="fu">c</span>(<span class="st">"lower"</span>, <span class="st">"upper"</span>)] <span class="sc">|&gt;</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">as.numeric</span>()</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>                    })</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  resumo[[parameter]] <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"media"</span>   <span class="ot">=</span> <span class="fu">apply</span>( post[parameter][[<span class="dv">1</span>]], <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, mean          )                   ,</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mediana"</span> <span class="ot">=</span> <span class="fu">apply</span>( post[parameter][[<span class="dv">1</span>]], <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, stats<span class="sc">::</span>median )                   ,</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"hpd_min"</span> <span class="ot">=</span> <span class="fu">apply</span>( hpd_temp, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="cf">function</span>(x) { <span class="fu">unlist</span>(x) <span class="sc">|&gt;</span> purrr<span class="sc">::</span><span class="fu">pluck</span>(<span class="dv">1</span>) }) ,</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"hpd_max"</span> <span class="ot">=</span> <span class="fu">apply</span>( hpd_temp, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="cf">function</span>(x) { <span class="fu">unlist</span>(x) <span class="sc">|&gt;</span> purrr<span class="sc">::</span><span class="fu">pluck</span>(<span class="dv">2</span>) })</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>resumo <span class="ot">=</span> <span class="fu">sapply</span>(resumo, <span class="cf">function</span>(x) { abind<span class="sc">::</span><span class="fu">abind</span>(x, <span class="at">along =</span> <span class="dv">3</span>) })</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(resumo<span class="sc">$</span>lambda[<span class="dv">1</span>,,<span class="st">"media"</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">ylab =</span> <span class="st">"escore"</span>, <span class="at">xlab =</span> <span class="st">"mês"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(resumo<span class="sc">$</span>lambda[<span class="dv">2</span>,,<span class="st">"media"</span>], <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(resumo<span class="sc">$</span>lambda[<span class="dv">3</span>,,<span class="st">"media"</span>], <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend =</span> <span class="fu">names</span>(group.sizes), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"red"</span>, <span class="st">"blue"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">bty =</span> <span class="st">"n"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="models_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>resumo<span class="sc">$</span>alpha[,,<span class="st">"media"</span>] <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  {\(.) <span class="st">`</span><span class="at">colnames&lt;-</span><span class="st">`</span>(., <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(.))}() <span class="sc">|&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  {\(.) dplyr<span class="sc">::</span><span class="fu">mutate</span>(., <span class="at">row =</span> <span class="fu">as.numeric</span>(<span class="fu">rownames</span>(.))) }() <span class="sc">|&gt;</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>row, <span class="at">names_to =</span> <span class="st">"factor"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(.data<span class="sc">$</span>factor, .data<span class="sc">$</span>row, <span class="at">fill =</span> .data<span class="sc">$</span>value)) <span class="sc">+</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">"blue"</span>, <span class="at">mid =</span> <span class="st">"white"</span>, <span class="at">high =</span> <span class="st">"red"</span>, <span class="at">midpoint =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="models_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(resumo<span class="sc">$</span>sigma[,<span class="dv">1</span>,<span class="st">"media"</span>], <span class="at">type=</span><span class="st">"b"</span>, <span class="at">ylab =</span> <span class="st">"sigma"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="models_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
