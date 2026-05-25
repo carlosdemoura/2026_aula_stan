@@ -642,9 +642,9 @@ init = list()
 n_chains = 2
 for (i in 1:n_chains) {
   init[[i]] = list(
-    alpha_ = rep(10, data$n_alpha_free),
-    lambda = matrix(0, data$n_fac, data$n_col),
-    sigma  = matrix(1, data$n_row, 1)
+    alpha_ = rep(10, data_FA$n_alpha_free),
+    lambda = matrix(0, data_FA$n_fac, data_FA$n_col),
+    sigma  = matrix(1, data_FA$n_row, 1)
   )
 }
 ```
@@ -656,7 +656,7 @@ fit_FA = sampling(mod_FA, data = data_FA, chains = n_chains, init = init, seed =
 
 ```{r}
 #| echo: false
-out = capture.output({fit_FA = sampling(mod_FA, data = data, chains = n_chains, init = init, seed = 12345)})
+out = capture.output({fit_FA = sampling(mod_FA, data = data_FA, chains = n_chains, init = init, seed = 12345)})
 out[1:20]
 ```
 

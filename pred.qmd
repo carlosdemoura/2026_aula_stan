@@ -130,7 +130,7 @@ fit_GLM_pred = rstan::sampling(mod_GLM_pred, data = data_GLM_pred, chains = 1, s
 ```{r}
 #| echo: false
 out = capture.output({fit_GLM_pred = rstan::sampling(mod_GLM_pred, data = data_GLM_pred, chains = 1, seed = 12345)})
-out[1:20]
+out[1:15]
 ```
 
 ```{r}
@@ -308,14 +308,55 @@ init = list()
 n_chains = 1
 for (i in 1:n_chains) {
   init[[i]] = list(
-    alpha_ = rep(10, data$n_alpha_free),
-    lambda = matrix(0, data$n_fac, data$n_col),
-    sigma  = matrix(1, data$n_row, 1)
+    alpha_ = rep(10, data_FA_pred$n_alpha_free),
+    lambda = matrix(0, data_FA_pred$n_fac, data_FA_pred$n_col),
+    sigma  = matrix(1, data_FA_pred$n_row, 1)
   )
 }
 ```
 
 ```{r}
+#| eval: false
 fit_FA_pred = rstan::sampling(mod_FA_pred, data = data_FA_pred, init = init, chains = n_chains)
+```
+
+```{r}
+#| echo: false
+out = capture.output({fit_FA_pred = rstan::sampling(mod_FA_pred, data = data_FA_pred, init = init, chains = n_chains)})
+out[1:15]
+```
+
+
+```{r}
+#| code-fold: true
+pred_post =
+  rstan::extract(fit_FA_pred, pars = "pred_") |>
+  purrr::pluck("pred_")
+
+pred_mean = apply(pred_post, 2, mean)
+hpd = coda::HPDinterval(coda::as.mcmc(pred_post), prob = 0.95)
+idx_missing = which(is.missing != 0, arr.ind = TRUE)
+id_pred = is.missing[idx_missing]
+
+cv =
+  tibble(
+    linha = idx_missing[,1],
+    estado  = temperatura$estado[linha],
+    estacao = temperatura$estacao[linha],
+    mes   = idx_missing[,2],
+    id_pred = id_pred,
+    valor_real = as.matrix(X)[idx_missing],
+    media_post = pred_mean[id_pred],
+    vr = (valor_real - media_post)/abs(valor_real),
+    hpd_inf = hpd[id_pred, 1],
+    hpd_sup = hpd[id_pred, 2],
+    hpd_contem = (valor_real >= hpd_inf) & (valor_real <= hpd_sup),
+    hpd_amp = hpd_sup - hpd_inf
+  ) |>
+  select(-c(linha, id_pred))
+  
+hist(cv$vr)
+mean(100*cv$hpd_contem)
+mean(cv$hpd_amp)
 ```
 
