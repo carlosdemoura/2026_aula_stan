@@ -1,13 +1,13 @@
 ---
-title: "Estrutura básica de um arquivo stan"
+title: "Estrutura básica de um modelo"
 ---
 
 ## Sobre o STAN
 
 O STAN é um software que usa uma sintaxe própria para implementar seu algoritmo de amostragem MCMC. Por conta disso é comum que se diga que STAN é também uma linguagem de programação.
-Como o STAN foi escrito em C++, a sintaxe que ele requer para a escrita dos scripts tem muitas similaridades com a dessa linguagem, mas também incorpora certos elementos de linguagens interpretadas como o R. Esse é o caso de estruturas como condições, laços e alguns operadores (como soma e multiplicação matriciais).
+Como o STAN foi escrito em C++, sua sintaxe tem muitas similaridades com a dessa linguagem, mas também incorpora certos elementos de linguagens interpretadas como o R. Esse é o caso de estruturas como condições, laços e alguns operadores (como soma e multiplicação matriciais).
 
-A principal diferença entre a sintaxe STAN e a de linguagens interpretadas é a tipagem. Como os algoritmos podem ser pesados
+A principal diferença entre a sintaxe do Stan e a de linguagens interpretadas como o R é a tipagem. O Stan é fortemente tipado, o que significa que o tipo de cada variável deve ser declarado explicitamente. Isso se deve ao fato de que o compilador do Stan realiza uma série de otimizações para tornar o algoritmo de amostragem mais eficiente.
 
 ### Compilação vs. estimação {.unnumbered}
 
@@ -23,16 +23,23 @@ Um modelo bayesiano está bem especificado se estão bem definidos os seguintes 
 * verossimilhança (ou a distribuição dos dados condicionados aos parâmetros) 
 * distribuições prioris dos parâmetros
 
-### Bloco data {.unnumbered}
+### Bloco data & transformed data {.unnumbered}
 
-### Bloco parameters & transformed parameters {.unnumbered}
+O bloco `data` é onde são declaradas as variáveis que o usuário deve passar ao compilador, podendo ser interpretado como os argumentos de uma função. Já no bloco `transformed data`, é possível realizar operações sobre essas variáveis. Em resumo, o bloco data deve conter apenas declarações, não sendo permitido atribuir valores a variáveis dentro dele. Caso se queira atribuir ou modificar valores, isso deve ser feito no bloco transformed data.
 
-Todas as variáveis especificadas nesse bloco devem obrigatoriamente
+### Blocos parameters & transformed parameters {.unnumbered}
+
+O bloco `data` é onde são declaradas as variáveis que o usuário deve passar ao compilador, podendo ser interpretado como os argumentos de uma função. Já no bloco `transformed data`, é possível realizar operações sobre essas variáveis. Em resumo, o bloco `data` deve conter apenas declarações, não sendo permitido atribuir valores a variáveis dentro dele. Caso se queira atribuir ou modificar valores, isso deve ser feito no bloco `transformed data`.
+
 
 ### Bloco model {.unnumbered}
 
+No bloco `model` são feitas todas as declarações probabilísticas, o que envolve definir uma distribuição para os dados condicionada aos parâmetros e uma distribuição para os próprios parâmetros. Essa especificação pode ser feita de duas formas: pela notação distribucional usual, em que se declara que uma variável segue determinada distribuição, ou por meio da palavra-chave `target`, que representa o logaritmo da densidade posterior não normalizada. O objetivo do algoritmo de amostragem será maximizar esse `target`.
+
+
 ### Bloco functions {.unnumbered}
 
+O bloco functions serve para declarar funções que serão utilizadas ao longo do código Stan. As funções nessa sintaxe seguem a mesma lógica das funções escritas em C++, o que inclui a necessidade de declarar explicitamente o tipo do valor de retorno e o tipo de cada argumento. Assim como em C++, o Stan não suporta funções com número variável de argumentos nem sobrecarga de operadores de forma arbitrária, o que reforça o caráter fortemente tipado da linguagem.
 
 ## Argumentos importantes
 
@@ -62,21 +69,7 @@ Caso o usuário não especifique um chute incial, o algoritmo do STAN tenta esco
 Caso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, em geral está associado a um modelo mal especifico ou a erros na escrita o script `.stan`.
 :::
 
-* `iter`: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).
 * `warmup`: o número de iterações que serão excluídas, por default o STAN escolhe o warmup como sendo igual a metade das iterações.
-
-::: {.callout-note collapse="true"}
-#### Conversando na torre de Babel
-
-Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), `warmup` e `iter` podem ter significados diferentes dos do rstan. É possível que `iter` signifique o número de amostras que o programa vai tomar após o `warmup`, então o total de iterações é dado por `warmup` + `iter`. No caso do rstan o total de iterações é `iter` - e, nesse caso, o tamanho da amostra da posteriori é `iter` - `warmup`.
-:::
-
-* `cores`: .
-* `data`: 
-* `pars`: 
-* `seed`: 
-
-## Extraindo e analisando a amostra
 
 ::: {.callout-caution collapse="true"}
 ### Porque não é uma boa ideia diminuir o warmup?
@@ -86,5 +79,18 @@ Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), `wa
 Essa filosofia é tão forte no pacote que não é possível alterar o valor do warmup uma vez que a amostragem foi feita. Assim, a função `rstan::extract` não aceita um argumento de warmup e nem é possível alterar esse atributo num objeto da classe `stanfit`, via `@`
 :::
 
-Em estatística Bayesiana, o objeto de toda inferência é a distribuição posteriori. Em particular estamos interessados em resumos essa distribuição, como esperança, mediana, desvio padrão. Outro resumo interessante é o interv
+* `iter`: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).
 
+::: {.callout-note collapse="true"}
+#### Conversando na torre de Babel
+
+Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), `warmup` e `iter` podem ter significados diferentes dos do rstan. É possível que `iter` signifique o número de amostras que o programa vai tomar após o `warmup`, então o total de iterações é dado por `warmup` + `iter`. No caso do rstan o total de iterações é `iter` - e, nesse caso, o tamanho da amostra da posteriori é `iter` - `warmup`.
+:::
+
+
+
+
+* `cores`: especifica quantos núcleos do processador serão utilizados no processo de estimação. Como os algoritmos MCMC são sequenciais por natureza, a forma mais direta de ganhar eficiência é dedicar um núcleo a cada cadeia, rodando-as em paralelo.
+* `data`: devem ser passados (por meio de uma lista) todos os objetos declarados no bloco `data` do arquivo `.stan`. É, essencialmente, a ponte entre o ambiente do R e o modelo especificado no Stan.
+* `pars`: permite especificar quais parâmetros o algoritmo de estimação deve retornar. Caso não seja especificado, o Stan retorna todos os parâmetros declarados no bloco `parameters` por padrão.
+* `seed`: define a semente utilizada para a geração dos valores iniciais e dos sorteios ao longo do algoritmo. É importante destacar que o Stan é um programa independente e utiliza seu próprio gerador de números aleatórios, separado do R. Por isso, definir uma semente na sessão do R com `set.seed()` não garante reprodutibilidade dos resultados do Stan — a semente deve ser definida diretamente no argumento `seed` da função de amostragem.

@@ -48,7 +48,7 @@ write.csv(estudantes, "stuff/estudantes.csv", row.names = F)
 ```{r}
 library(rsample)
 
-estudantes = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/estudantes.csv"))
+estudantes = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan/refs/heads/main/stuff/estudantes.csv"))
 
 set.seed(12345)
 split = initial_split(estudantes, prop = 0.8, strata = pass)
@@ -130,7 +130,7 @@ fit_GLM_pred = rstan::sampling(mod_GLM_pred, data = data_GLM_pred, chains = 1, s
 ```{r}
 #| echo: false
 out = capture.output({fit_GLM_pred = rstan::sampling(mod_GLM_pred, data = data_GLM_pred, chains = 1, seed = 12345)})
-out[1:15]
+cat(out[1:15], sep = "\n")
 ```
 
 ```{r}
@@ -148,7 +148,7 @@ estudantes_teste |>
 ## FA
 
 ```{r}
-temperatura = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/temperatura.csv"), check.names = FALSE)
+temperatura = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan/refs/heads/main/stuff/temperatura.csv"), check.names = FALSE)
 
 n.pred = floor(.2 * nrow(temperatura) * 12)
 
@@ -325,7 +325,7 @@ fit_FA_pred = rstan::sampling(mod_FA_pred, data = data_FA_pred, init = init, cha
 ```{r}
 #| echo: false
 out = capture.output({fit_FA_pred = rstan::sampling(mod_FA_pred, data = data_FA_pred, init = init, chains = n_chains)})
-out[1:15]
+cat(out[1:15], sep = "\n")
 ```
 
 

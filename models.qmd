@@ -13,7 +13,7 @@ library(posterior)
 library(shinystan)
 ```
 
-## GLM com efeito aleatório
+<!--
 
 ```{r}
 Kline = read.csv(url("https://raw.githubusercontent.com/rmcelreath/rethinking/refs/heads/master/data/Kline.csv"), sep =";") |>
@@ -52,12 +52,6 @@ model {
 }
 
 ```
-
-::: {.callout-note collapse="true"}
-#### Leia-me se você não for uma batata
-
-A compilação do modelo acima (como está) deve falhar. Se em algum momento uma distribuição discreta é atribuida a alguma variável 
-:::
 
 ```{r}
 X = model.matrix(total_tools ~ contact * log(population), data = Kline)
@@ -128,22 +122,14 @@ out = capture.output({fit_GLM = rstan::sampling(mod_GLM, data = data_GLM)})
 
 ### Offset e comparações múltiplas
 
+-->
+## GLM
+
+Os dados que usaremos primeiro são sobre casos de câncer de pulmão registrados em quatro cidades dinamarquesas: Fredericia, Horsens, Kolding e Vejle. O modelo proposto é um modelo linear generalizado com distribuição de Poisson e função de ligação logarítmica e offset, ou seja um modelo de taxas de risco relativo. O modelo é especificado da seguinte forma:
+
 ```{r}
-danishlc = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/danishlc.csv"), sep =",")
+danishlc = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan/refs/heads/main/stuff/danishlc.csv"), sep =",")
 ```
-
-```stan
-generated quantities {
-  real Horsens_vs_Kolding;
-  real Horsens_vs_Vejle;
-  real Kolding_vs_Vejle;
-
-  Horsens_vs_Kolding = beta[2] - beta[3];
-  Horsens_vs_Vejle   = beta[2] - beta[4];
-  Kolding_vs_Vejle   = beta[3] - beta[4];
-}
-```
-
 
 ```{r}
 #| echo: false
@@ -152,6 +138,54 @@ danishlc |>
   head(10) |>
   knitr::kable(align="c")
 ```
+
+$$Y_i \sim \text{Poisson}(\mu_i)$$
+
+$$\log(\mu_i) = \log(n_i) + \alpha + \beta_{\text{idade}[i]} + \gamma_{\text{cidade}[i]}$$
+
+
+
+
+```stan
+data {
+  int<lower=1> n;
+  int<lower=1> p;
+  matrix[n, p] X;
+  vector[n] Y;
+  vector[n] offset;
+}
+parameters {
+  vector[p] beta;
+}
+transformed parameters {
+  vector[n] eta;
+  eta = X * beta;
+}
+model {
+  for (i in 1:n) {
+    Y[i] ~ poisson(offset[i] + exp(eta[i]));
+  }
+  for (k in 1:p) {
+    beta[k] ~ normal(0,10);
+  }
+}
+generated quantities {
+  real Horsens_vs_Kolding;
+  real Horsens_vs_Vejle;
+  real Kolding_vs_Vejle;
+
+  Horsens_vs_Kolding = beta[1] - beta[2];
+  Horsens_vs_Vejle   = beta[1] - beta[3];
+  Kolding_vs_Vejle   = beta[2] - beta[3];
+}
+
+```
+
+::: {.callout-note collapse="true"}
+#### Leia-me se você não for uma batata
+
+A compilação do modelo acima (como está) deve falhar. Se em algum momento uma distribuição discreta é atribuida a alguma variável 
+:::
 
 ```{r}
 #| code-fold: true
@@ -230,6 +264,7 @@ data_GLM2 =
 
 mod_GLM2 = readRDS("stuff/mod_GLM2.rds")
 out = capture.output({fit_GLM2 = rstan::sampling(mod_GLM2, data = data_GLM2)})
+cat(out[1:15], sep = "\n")
 ```
 
 ```{r}
@@ -237,8 +272,9 @@ plot(fit_GLM2, pars = "beta", ci_level = 0.95)
 ```
 
 ## Análise de sobrevivência
+
 ```{r}
-isoladores = read.csv(url("https://github.com/carlosdemoura/2026_aula_stan_dani/raw/refs/heads/main/stuff/isoladores.csv"))
+isoladores = read.csv(url("https://github.com/carlosdemoura/2026_aula_stan/raw/refs/heads/main/stuff/isoladores.csv"))
 ```
 
 ```{r}
@@ -262,6 +298,9 @@ head(isoladores, 5) |>
 survfit(Surv(tempo, evento)~1, data = isoladores) |>
   plot(mark.time=T)
 ```
+
+O modelo ajustado assume que os tempos de falha dos isoladores seguem uma distribuição de Weibull com parâmetro de forma $\alpha$ e parâmetro de escala $\sigma$, de modo que a função de sobrevivência é dada por $S(t) = \exp\left\{-\left(t/\sigma\right)^{\alpha}\right\}$. As distribuições a priori adotadas foram $\alpha \sim \text{Gamma}(0.1, 0.1)$ e $\sigma \sim \text{Gamma}(0.1, 0.1)$, ambas pouco informativas. A verossimilhança é construída observação a observação: para os isoladores que falharam, a contribuição é a densidade de Weibull avaliada no tempo de falha; para os isoladores censurados às 2729 horas, a contribuição é $S(t) = P(T > t)$, isto é, a probabilidade de o isolador ter sobrevivido além do tempo de censura. Ao combinar essas contribuições com as distribuições a priori, o algoritmo de amostragem obtém a distribuição posterior de $\alpha$ e $\sigma$, a partir da qual é possível derivar a distribuição posterior da própria curva de sobrevivência em qualquer ponto do tempo.
+
 ```stan
 data {
   int<lower=1> n;
@@ -362,6 +401,7 @@ data_surv =
 mod_surv_weib = readRDS("stuff/mod_surv_weib.rds")
 out = capture.output({fit_surv_weib = rstan::sampling(mod_surv_weib, data = data_surv, pars = c("alpha", "sigma", "S"))
 })
+cat(out[1:15], sep = "\n")
 ```
 
 ```{r}
@@ -484,7 +524,7 @@ temperatura =
 ```
 
 ```{r}
-temperatura = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan_dani/refs/heads/main/stuff/temperatura.csv"), check.names = FALSE)
+temperatura = read.csv(url("https://raw.githubusercontent.com/carlosdemoura/2026_aula_stan/refs/heads/main/stuff/temperatura.csv"), check.names = FALSE)
 ```
 
 ```{r}
@@ -657,7 +697,7 @@ fit_FA = sampling(mod_FA, data = data_FA, chains = n_chains, init = init, seed =
 ```{r}
 #| echo: false
 out = capture.output({fit_FA = sampling(mod_FA, data = data_FA, chains = n_chains, init = init, seed = 12345)})
-out[1:20]
+cat(out[1:15], sep = "\n")
 ```
 
 
