@@ -326,8 +326,8 @@ div.csl-indent {
 <pre><code> [1] ""                                                                                         
  [2] "SAMPLING FOR MODEL 'GLM_pred' NOW (CHAIN 1)."                                             
  [3] "Chain 1: "                                                                                
- [4] "Chain 1: Gradient evaluation took 0.000118 seconds"                                       
- [5] "Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.18 seconds."
+ [4] "Chain 1: Gradient evaluation took 0.000123 seconds"                                       
+ [5] "Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.23 seconds."
  [6] "Chain 1: Adjust your expectations accordingly!"                                           
  [7] "Chain 1: "                                                                                
  [8] "Chain 1: "                                                                                
@@ -337,15 +337,10 @@ div.csl-indent {
 [12] "Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)"                                         
 [13] "Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)"                                         
 [14] "Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)"                                         
-[15] "Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)"                                       
-[16] "Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)"                                       
-[17] "Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)"                                       
-[18] "Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)"                                       
-[19] "Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)"                                       
-[20] "Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)"                                       </code></pre>
+[15] "Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)"                                       </code></pre>
 </div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Código</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>estudantes_teste <span class="sc">|&gt;</span></span>
@@ -356,9 +351,9 @@ div.csl-indent {
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">boxplot</span>(mu_pred <span class="sc">~</span> pass))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="pred_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="pred_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
 </figure>
 </div>
 </div>
@@ -534,8 +529,8 @@ div.csl-indent {
 <pre><code> [1] ""                                                                                         
  [2] "SAMPLING FOR MODEL 'FA_pred' NOW (CHAIN 1)."                                              
  [3] "Chain 1: "                                                                                
- [4] "Chain 1: Gradient evaluation took 0.000111 seconds"                                       
- [5] "Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.11 seconds."
+ [4] "Chain 1: Gradient evaluation took 5.4e-05 seconds"                                        
+ [5] "Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.54 seconds."
  [6] "Chain 1: Adjust your expectations accordingly!"                                           
  [7] "Chain 1: "                                                                                
  [8] "Chain 1: "                                                                                
@@ -545,15 +540,12 @@ div.csl-indent {
 [12] "Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)"                                         
 [13] "Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)"                                         
 [14] "Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)"                                         
-[15] "Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)"                                       
-[16] "Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)"                                       
-[17] "Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)"                                       
-[18] "Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)"                                       
-[19] "Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)"                                       
-[20] "Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)"                                       </code></pre>
+[15] "Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)"                                       </code></pre>
 </div>
 </div>
 <div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pred_post <span class="ot">=</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  rstan<span class="sc">::</span><span class="fu">extract</span>(fit_FA_pred, <span class="at">pars =</span> <span class="st">"pred_"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">pluck</span>(<span class="st">"pred_"</span>)</span>
@@ -578,21 +570,25 @@ div.csl-indent {
 <span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">hpd_contem =</span> (valor_real <span class="sc">&gt;=</span> hpd_inf) <span class="sc">&amp;</span> (valor_real <span class="sc">&lt;=</span> hpd_sup),</span>
 <span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">hpd_amp =</span> hpd_sup <span class="sc">-</span> hpd_inf</span>
 <span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(linha, id_pred))</span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(cv<span class="sc">$</span>vr)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(linha, id_pred))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(cv<span class="sc">$</span>vr)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="pred_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="pred_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="dv">100</span><span class="sc">*</span>cv<span class="sc">$</span>hpd_contem)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="dv">100</span><span class="sc">*</span>cv<span class="sc">$</span>hpd_contem)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 95.16129</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(cv<span class="sc">$</span>hpd_amp)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(cv<span class="sc">$</span>hpd_amp)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2.766757</code></pre>
 </div>

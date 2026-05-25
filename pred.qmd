@@ -135,6 +135,8 @@ out[1:15]
 
 ```{r}
 #| code-fold: true
+#| out-width: "70%"
+#| fig-align: center
 estudantes_teste |>
   select(pass) |>
   mutate(
@@ -354,8 +356,17 @@ cv =
     hpd_amp = hpd_sup - hpd_inf
   ) |>
   select(-c(linha, id_pred))
-  
+```
+
+
+```{r}
+#| out-width: "60%"
+#| fig-align: center
 hist(cv$vr)
+```
+
+
+```{r}
 mean(100*cv$hpd_contem)
 mean(cv$hpd_amp)
 ```
