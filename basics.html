@@ -295,24 +295,23 @@ window.Quarto = {
 </section>
 <section id="bloco-functions" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="bloco-functions">Bloco functions</h3>
-<p>O bloco functions serve para declarar funções que serão utilizadas ao longo do código Stan. As funções nessa sintaxe seguem a mesma lógica das funções escritas em C++, o que inclui a necessidade de declarar explicitamente o tipo do valor de retorno e o tipo de cada argumento. Assim como em C++, o Stan não suporta funções com número variável de argumentos nem sobrecarga de operadores de forma arbitrária, o que reforça o caráter fortemente tipado da linguagem.</p>
+<p>O bloco <code>functions</code> serve para declarar funções que serão utilizadas ao longo do código Stan. As funções nessa sintaxe seguem a mesma lógica das funções escritas em C++, o que inclui a necessidade de declarar explicitamente o tipo do valor de retorno e o tipo de cada argumento.</p>
 </section>
 </section>
 <section id="argumentos-importantes" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="argumentos-importantes"><span class="header-section-number">2.3</span> Argumentos importantes</h2>
-<p>O help pode ser acessado via <code>?rstan::sampling</code> ou <code>?rstan::stan</code></p>
+<p>O help pode ser acessado via <code>?rstan::sampling</code> ou <code>?rstan::stan</code>.</p>
 <ul>
 <li><code>chains</code>: o número de cadeias que se deseja rodar</li>
-<li><code>init</code>: aqui ficam armazenados os valores do chute inicial das cadeias. Esse argumento deve ser obrigatoriamente uma lista de listas em que, no primeiro nível, fica a cadeia e, no segundo nível, uma lista nomeada com os parâmetros especificados no <code>.stan</code> e cujos valores são o chute inicial da cadeia. Note que deve sempre valer <code>length(init) == chains</code>. No exemplo abaixo, o modelo tem dois parâmetros (<span class="math inline">\(\alpha\)</span> e <span class="math inline">\(\beta\)</span>) e na primeira cadeia o chute inicial é <span class="math inline">\(\alpha_0 = 2, \beta_0=3\)</span> enquanto na segunda cadeia é <span class="math inline">\(\alpha_0 = -1, \beta_0=0\)</span>.</li>
+<li><code>init</code>: aqui ficam armazenados os valores do chute inicial das cadeias. Esse argumento deve ser obrigatoriamente uma lista de listas em que, no primeiro nível, fica a cadeia e, no segundo nível, uma lista nomeada com os parâmetros especificados no <code>.stan</code> e cujos valores são o chute inicial da cadeia. Note que deve sempre valer <code>length(init) == chains</code>. No exemplo abaixo, o modelo tem dois parâmetros (<span class="math inline">\(\alpha\)</span> e <span class="math inline">\(\beta\)</span>) e na primeira cadeia o chute inicial é <span class="math inline">\(\alpha_0 = 2, \beta_0=3\)</span>; na segunda cadeia é <span class="math inline">\(\alpha_0 = -1, \beta_0\)</span> é escolhido pelo STAN; na terceira cadeia <span class="math inline">\(\beta_0=100\)</span> e <span class="math inline">\(\alpha\)</span> é escolhido pelo STAN, pois não foi especificado.</li>
 </ul>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>init <span class="ot">=</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">2</span>, <span class="at">beta =</span> <span class="dv">3</span>),</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">alpha =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">beta =</span> <span class="dv">0</span>),</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="st">"random"</span>),</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="dv">0</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">alpha =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">beta =</span> <span class="st">"random"</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">beta =</span> <span class="dv">100</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">

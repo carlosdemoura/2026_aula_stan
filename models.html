@@ -254,6 +254,7 @@ window.Quarto = {
 </header>
 
 
+<p>Abaixo veremos alguns modelos analisados sob o paradigma subjetivista. Para economizar tempo, suprimimos análises exploratórias, mas reforçamos que essa etapa é indispensável para qualquer análise estatística.</p>
 <!--
 
 
@@ -495,7 +496,7 @@ fit_GLM = rstan::sampling(mod_GLM, data = data_GLM)
 <p>O modelo é especificado da seguinte forma:</p>
 <p><span class="math display">\[Y_i \sim \text{Poisson}(\mu_i)\]</span></p>
 <p><span class="math display">\[\log(\mu_i) = \log(n_i) + \beta_0 + \beta_{\text{idade}[i]} + \gamma_{\text{cidade}[i]}\]</span></p>
-<p>Para todos os coeficientes do preditor linear foram adotadas as prioris <span class="math inline">\(\beta_i \sim N(0,10)\)</span>.</p>
+<p>Para todos os coeficientes do preditor linear foi adotada a mesma priori vaga: <span class="math inline">\(\beta_i \sim N(0,10)\)</span>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n;</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; p;</span>
@@ -604,8 +605,8 @@ fit_GLM = rstan::sampling(mod_GLM, data = data_GLM)
 <pre><code>
 SAMPLING FOR MODEL 'GLM2' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 6e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+Chain 1: Gradient evaluation took 7e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -618,12 +619,12 @@ Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 </div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_GLM2, <span class="at">pars =</span> <span class="st">"beta"</span>, <span class="at">ci_level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="models_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="models_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
 </figure>
 </div>
 </div>
@@ -781,8 +782,8 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 <pre><code>
 SAMPLING FOR MODEL 'surv_weib' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 1e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
+Chain 1: Gradient evaluation took 1.1e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -840,25 +841,25 @@ $lp__
 <span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(resumo, head)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$alpha
-         media   mediana   hpd_min   hpd_max
-[1,] 0.3106649 0.3062019 0.2136963 0.4119273
+         media  mediana   hpd_min   hpd_max
+[1,] 0.3076674 0.303284 0.2146824 0.4189463
 
 $sigma
-        media  mediana hpd_min  hpd_max
-[1,] 198.6368 193.5185 92.2115 309.7272
+        media mediana  hpd_min  hpd_max
+[1,] 195.5883 189.809 91.63133 305.9038
 
 $S
          media   mediana   hpd_min   hpd_max
 [1,] 1.0000000 1.0000000 1.0000000 1.0000000
-[2,] 0.5791727 0.5756191 0.4716592 0.6881930
-[3,] 0.5092276 0.5055876 0.4108984 0.6045340
-[4,] 0.4656739 0.4626013 0.3774070 0.5533921
-[5,] 0.4338646 0.4310154 0.3624306 0.5237759
-[6,] 0.4088088 0.4059287 0.3434059 0.4926755
+[2,] 0.5757395 0.5729546 0.4756732 0.6937362
+[3,] 0.5062755 0.5028072 0.4109795 0.6031665
+[4,] 0.4630745 0.4595308 0.3771913 0.5498084
+[5,] 0.4315437 0.4278907 0.3551371 0.5127364
+[6,] 0.4067175 0.4033479 0.3356832 0.4818058
 
 $lp__
          media   mediana   hpd_min   hpd_max
-[1,] -465.8197 -465.4981 -467.9344 -464.8247</code></pre>
+[1,] -465.8611 -465.5799 -467.8909 -464.8251</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1054,7 +1055,7 @@ $lp__
 </div>
 </div>
 <p>Para a verossimilhança, assume-se que cada coluna de <span class="math inline">\(\varepsilon_{i,j} \sim N(0, \sigma^2_i)\)</span>, o que é equivalente a assumir que:</p>
-<p><span class="math display">\[X_{i,j} \sim \text{Normal}\bigr((\alpha\lambda)_{i,j},\ \sigma^2_i\bigr)\]</span>.</p>
+<p><span class="math display">\[X_{i,j} \sim \text{Normal}\bigr((\alpha\lambda)_{i,j},\ \sigma^2_i\bigr).\]</span></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_row;</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_col;</span>
@@ -1206,8 +1207,8 @@ $lp__
 <pre><code>
 SAMPLING FOR MODEL 'FA' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 4.1e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.41 seconds.
+Chain 1: Gradient evaluation took 4.8e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.48 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -1221,8 +1222,6 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 </div>
 </div>
 <div class="cell">
-<details class="code-fold">
-<summary>Código</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>post <span class="ot">=</span> rstan<span class="sc">::</span><span class="fu">extract</span>(fit_FA, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"alpha"</span>, <span class="st">"lambda"</span>, <span class="st">"sigma"</span>))</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>resumo <span class="ot">=</span> <span class="fu">list</span>()</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1241,9 +1240,7 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 <span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>resumo <span class="ot">=</span> <span class="fu">sapply</span>(resumo, <span class="cf">function</span>(x) { abind<span class="sc">::</span><span class="fu">abind</span>(x, <span class="at">along =</span> <span class="dv">3</span>) })</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>resumo <span class="ot">=</span> <span class="fu">sapply</span>(resumo, <span class="cf">function</span>(x) { abind<span class="sc">::</span><span class="fu">abind</span>(x, <span class="at">along =</span> <span class="dv">3</span>) })</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <details class="code-fold">

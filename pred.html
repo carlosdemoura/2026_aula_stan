@@ -224,12 +224,12 @@ div.csl-indent {
 </header>
 
 
-<section id="predições-no-stan" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="predições-no-stan"><span class="header-section-number">4.1</span> Predições no STAN</h2>
 <blockquote class="blockquote">
 <p>Bayesian models are generative, meaning they can be used to simulate observations just as well as they can be used to estimate parameters. One benefit of this fact is that a statistical model can be developed by thinking hard about how the data might have arisen.”</p>
 <p>— Richard McElreath, <em>Statistical Rethinking: A Bayesian Course with Examples in R and Stan</em> (2020)</p>
 </blockquote>
+<section id="predições-no-stan" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="predições-no-stan"><span class="header-section-number">4.1</span> Predições no STAN</h2>
 <p>Predições como parâmetro vs.&nbsp;generated quantites</p>
 </section>
 <section id="glm" class="level2" data-number="4.2">
@@ -326,8 +326,8 @@ div.csl-indent {
 <pre><code>
 SAMPLING FOR MODEL 'GLM_pred' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 0.000115 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.15 seconds.
+Chain 1: Gradient evaluation took 0.000121 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.21 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -402,7 +402,7 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell">
 <details class="code-fold">
-<summary>Código</summary>
+<summary>STAN model</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mod_FA_pred <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="at">model_name =</span> <span class="st">"FA_pred"</span>, <span class="at">model_code =</span> <span class="st">"</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="st">data {</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="st">  int&lt;lower=1&gt; n_row;</span></span>
@@ -470,7 +470,7 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 </div>
 <div class="cell">
 <details class="code-fold">
-<summary>Código</summary>
+<summary>Setup para bloco data</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>group.sizes <span class="ot">=</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  temperatura <span class="sc">|&gt;</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(estado) <span class="sc">|&gt;</span></span>
@@ -529,8 +529,8 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 <pre><code>
 SAMPLING FOR MODEL 'FA_pred' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 5.2e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.52 seconds.
+Chain 1: Gradient evaluation took 5.4e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.54 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
