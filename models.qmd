@@ -189,7 +189,7 @@ generated quantities {
 ::: {.callout-note collapse="true"}
 #### Leia-me se você não for uma batata
 
-A compilação do modelo acima (como está) deve falhar. Se em algum momento uma distribuição discreta é atribuida a alguma variável 
+A compilação do modelo acima (como está) deve falhar. Se em algum momento uma distribuição discreta é atribuida a alguma variável do tipo `real` ou `vector` (que no fundo é um array de variável `real`), a compilação do modelo falhará.
 :::
 
 ```{r}
@@ -308,7 +308,7 @@ survfit(Surv(tempo, evento)~1, data = isoladores) |>
   plot(mark.time=T)
 ```
 
-O modelo ajustado assume que os tempos de falha dos isoladores seguem uma distribuição de Weibull com parâmetro de forma $\alpha$ e parâmetro de escala $\sigma$, de modo que a função de sobrevivência é dada por $S(t) = \exp\left\{-\left(t/\sigma\right)^{\alpha}\right\}$. As distribuições a priori adotadas foram $\alpha \sim \text{Gamma}(0.1, 0.1)$ e $\sigma \sim \text{Gamma}(0.1, 0.1)$, ambas pouco informativas.
+O modelo ajustado assume que os tempos de falha dos isoladores seguem uma distribuição de Weibull com parâmetro de forma $\alpha$ e parâmetro de escala $\sigma$, de modo que a função de sobrevivência é dada por $S(t) = \exp\left\{-\left(t/\sigma\right)^{\alpha}\right\}$. As distribuições a priori adotadas foram $\alpha \sim \text{Gamma}(0.1, 0.1)$ e $\sigma \sim \text{Gamma}(0.1, 0.1)$, ambas pouco informativas (será?).
 
 A verossimilhança é construída observação a observação: para os isoladores que falharam, a contribuição é a densidade de Weibull avaliada no tempo de falha; para os isoladores censurados às 2729 horas, a contribuição é $S(t) = P(T > t)$, isto é, a probabilidade de o isolador ter sobrevivido além do tempo de censura.
 
@@ -347,7 +347,7 @@ generated quantities {
 ::: {.callout-tip}
 #### Estimando a sobrevivência
 
-A partir da estimação da distribuição a posteriori dos parâmetros é possível derivar a distribuição posterior da própria curva de sobrevivência em qualquer ponto do tempo, aqui escolhemos um grid de 100 pontos entre zero e o tempo máximo.
+A partir da estimação da distribuição posterior dos parâmetros é possível derivar a distribuição posterior da própria curva de sobrevivência em qualquer ponto do tempo, aqui escolhemos um grid de 100 pontos entre zero e o tempo máximo.
 :::
 
 

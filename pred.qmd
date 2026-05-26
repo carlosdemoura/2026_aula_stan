@@ -19,7 +19,7 @@ library(shinystan)
 
 ## Predições no STAN
 
-Predições como parâmetro vs. generated quantites
+Sob o paradigma subjetivista, todas as quantidades desconhecidas podem ser inseridas no modelo por meio de uma distribuição prévia - e a inferência sobre essas quantidades será feita a partir de sua distribuição posterior. Assim, é possível estimar a distribuição preditiva dos dados durante o MCMC que estima os parâmetros  Predições como parâmetro vs. generated quantites Nesta seção optamos pela segunda abordagem ~~por ignorância do monitor~~.
 
 ## GLM
 
@@ -59,6 +59,7 @@ estudantes_teste  = testing(split)
 transformed parameters {
   vector[n_obs] eta_obs;
   vector[n_pred] mu_pred;
+  
   eta_obs = X_obs * beta;
   mu_pred = inv_logit(X_pred * beta);
 }

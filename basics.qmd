@@ -13,6 +13,16 @@ A principal diferença entre a sintaxe do Stan e a de linguagens interpretadas c
 
 O uso do STAN pode ser dividido em duas etapas: compilação do modelo e construção da cadeia. Uma vez que o modelo está bem especificado (e o script STAN está pronto), é necessário compilar esse código em um arquivo executável (é esse arquivo que tomará amostras de uma cadeia MCMC). Note que 
 
+### Sobre tipos primitivos {.unnumbered}
+
+<!--
+Declaração de suporte
+
+
+The model must have support (non-zero density, equivalently finite log density) at parameter values that satisfy the declared constraints.
+
+If this condition is violated with parameter values that satisfy declared constraints but do not have finite log density, then the samplers and optimizers may have any of a number of pathologies including just getting stuck, failure to initialize, excessive Metropolis rejection, or biased draws due to inability to explore the tails of the distribution.
+-->
 
 ## Blocos 
 
@@ -25,7 +35,7 @@ Um modelo bayesiano está bem especificado se estão bem definidos os seguintes 
 
 ### Bloco data & transformed data {.unnumbered}
 
-O bloco `data` é onde são declaradas as variáveis que o usuário deve passar ao compilador, podendo ser interpretado como os argumentos de uma função. Já no bloco `transformed data`, é possível realizar operações sobre essas variáveis. Em resumo, o bloco data deve conter apenas declarações, não sendo permitido atribuir valores a variáveis dentro dele. Caso se queira atribuir ou modificar valores, isso deve ser feito no bloco transformed data.
+O bloco `data` é onde são declaradas as variáveis que o usuário deve passar   ao compilador, podendo ser interpretado como os argumentos de uma função. Já no bloco `transformed data`, é possível realizar operações sobre essas variáveis. Em resumo, o bloco data deve conter apenas declarações, não sendo permitido atribuir valores a variáveis dentro dele. Caso se queira atribuir ou modificar valores, isso deve ser feito no bloco transformed data.
 
 ### Blocos parameters & transformed parameters {.unnumbered}
 
@@ -39,7 +49,7 @@ No bloco `model` são feitas todas as declarações probabilísticas, o que envo
 
 ### Bloco functions {.unnumbered}
 
-O bloco `functions` serve para declarar funções que serão utilizadas ao longo do código Stan. As funções nessa sintaxe seguem a mesma lógica das funções escritas em C++, o que inclui a necessidade de declarar explicitamente o tipo do valor de retorno e o tipo de cada argumento.
+O bloco `functions` serve para declarar funções que serão utilizadas ao longo do código Stan. As funções nessa sintaxe seguem a mesma lógica das funções escritas em C++, o que inclui a tipagem forte e a sintaxe de escopo.
 
 ## Argumentos importantes
 
