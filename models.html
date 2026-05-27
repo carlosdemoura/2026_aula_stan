@@ -540,7 +540,7 @@ fit_GLM = rstan::sampling(mod_GLM, data = data_GLM)
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>A compilação do modelo acima (como está) deve falhar. Se em algum momento uma distribuição discreta é atribuida a alguma variável</p>
+<p>A compilação do modelo acima (como está) deve falhar. Se em algum momento uma distribuição discreta é atribuida a alguma variável do tipo <code>real</code> ou <code>vector</code> (que no fundo é um array de variável <code>real</code>), a compilação do modelo falhará.</p>
 </div>
 </div>
 </div>
@@ -605,8 +605,8 @@ fit_GLM = rstan::sampling(mod_GLM, data = data_GLM)
 <pre><code>
 SAMPLING FOR MODEL 'GLM2' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 7e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+Chain 1: Gradient evaluation took 1e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -681,7 +681,7 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 </div>
 </div>
 </div>
-<p>O modelo ajustado assume que os tempos de falha dos isoladores seguem uma distribuição de Weibull com parâmetro de forma <span class="math inline">\(\alpha\)</span> e parâmetro de escala <span class="math inline">\(\sigma\)</span>, de modo que a função de sobrevivência é dada por <span class="math inline">\(S(t) = \exp\left\{-\left(t/\sigma\right)^{\alpha}\right\}\)</span>. As distribuições a priori adotadas foram <span class="math inline">\(\alpha \sim \text{Gamma}(0.1, 0.1)\)</span> e <span class="math inline">\(\sigma \sim \text{Gamma}(0.1, 0.1)\)</span>, ambas pouco informativas.</p>
+<p>O modelo ajustado assume que os tempos de falha dos isoladores seguem uma distribuição de Weibull com parâmetro de forma <span class="math inline">\(\alpha\)</span> e parâmetro de escala <span class="math inline">\(\sigma\)</span>, de modo que a função de sobrevivência é dada por <span class="math inline">\(S(t) = \exp\left\{-\left(t/\sigma\right)^{\alpha}\right\}\)</span>. As distribuições a priori adotadas foram <span class="math inline">\(\alpha \sim \text{Gamma}(0.1, 0.1)\)</span> e <span class="math inline">\(\sigma \sim \text{Gamma}(0.1, 0.1)\)</span>, ambas pouco informativas (será?).</p>
 <p>A verossimilhança é construída observação a observação: para os isoladores que falharam, a contribuição é a densidade de Weibull avaliada no tempo de falha; para os isoladores censurados às 2729 horas, a contribuição é <span class="math inline">\(S(t) = P(T &gt; t)\)</span>, isto é, a probabilidade de o isolador ter sobrevivido além do tempo de censura.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n;</span>
@@ -723,7 +723,7 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A partir da estimação da distribuição a posteriori dos parâmetros é possível derivar a distribuição posterior da própria curva de sobrevivência em qualquer ponto do tempo, aqui escolhemos um grid de 100 pontos entre zero e o tempo máximo.</p>
+<p>A partir da estimação da distribuição posterior dos parâmetros é possível derivar a distribuição posterior da própria curva de sobrevivência em qualquer ponto do tempo, aqui escolhemos um grid de 100 pontos entre zero e o tempo máximo.</p>
 </div>
 </div>
 <div class="cell">
@@ -841,25 +841,25 @@ $lp__
 <span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(resumo, head)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$alpha
-         media  mediana   hpd_min   hpd_max
-[1,] 0.3103742 0.306533 0.2182022 0.4159945
+         media   mediana   hpd_min   hpd_max
+[1,] 0.3093604 0.3061205 0.2102104 0.4049143
 
 $sigma
-        media mediana  hpd_min  hpd_max
-[1,] 197.4404 191.309 94.22619 312.3663
+        media  mediana  hpd_min  hpd_max
+[1,] 197.0408 193.0087 98.68459 306.6559
 
 $S
          media   mediana   hpd_min   hpd_max
 [1,] 1.0000000 1.0000000 1.0000000 1.0000000
-[2,] 0.5782794 0.5751835 0.4673560 0.6873508
-[3,] 0.5084089 0.5046141 0.4134467 0.6109048
-[4,] 0.4649055 0.4609336 0.3736235 0.5528048
-[5,] 0.4331340 0.4291061 0.3519409 0.5165523
-[6,] 0.4081083 0.4042330 0.3369573 0.4891514
+[2,] 0.5776682 0.5759195 0.4750639 0.6851592
+[3,] 0.5078419 0.5054211 0.4173026 0.6028906
+[4,] 0.4643978 0.4619864 0.3806966 0.5488449
+[5,] 0.4326845 0.4304003 0.3588760 0.5121926
+[6,] 0.4077129 0.4055280 0.3373536 0.4801314
 
 $lp__
-        media   mediana   hpd_min   hpd_max
-[1,] -465.836 -465.5263 -467.8494 -464.8247</code></pre>
+         media   mediana   hpd_min   hpd_max
+[1,] -465.7977 -465.5081 -467.7445 -464.8249</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1207,8 +1207,8 @@ $lp__
 <pre><code>
 SAMPLING FOR MODEL 'FA' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 4.1e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.41 seconds.
+Chain 1: Gradient evaluation took 4.8e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.48 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -1308,6 +1308,9 @@ Gelman, Andrew. 2017. <span>«Burn-in vs. warm-up for iterative simulation algor
 </div>
 <div id="ref-mcelreath" class="csl-entry" role="listitem">
 McElreath, Richard. 2020. <em>Statistical Rethinking: A Bayesian Course with Examples in R and Stan</em>. 2.ª ed. CRC Press. <a href="https://www.amazon.com.br/Statistical-Rethinking-Bayesian-Course-Examples/dp/036713991X">https://www.amazon.com.br/Statistical-Rethinking-Bayesian-Course-Examples/dp/036713991X</a>.
+</div>
+<div id="ref-neto" class="csl-entry" role="listitem">
+Neto, João. 2020. <span>«About Stan»</span>. junho de 2020. <a href="https://www.di.fc.ul.pt/~jpn/r/stan/stan.html">https://www.di.fc.ul.pt/~jpn/r/stan/stan.html</a>.
 </div>
 <div id="ref-stan_reference_manual" class="csl-entry" role="listitem">
 Stan Development Team. 2020. <em>Stan Reference Manual: HMC Algorithm Parameters</em>. <a href="https://mc-stan.org/docs/reference-manual/index.html">https://mc-stan.org/docs/reference-manual/index.html</a>.
