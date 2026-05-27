@@ -229,6 +229,7 @@ window.Quarto = {
   <li><a href="#sobre-o-stan" id="toc-sobre-o-stan" class="nav-link active" data-scroll-target="#sobre-o-stan"><span class="header-section-number">2.1</span> Sobre o STAN</a>
   <ul class="collapse">
   <li><a href="#compilação-vs.-estimação" id="toc-compilação-vs.-estimação" class="nav-link" data-scroll-target="#compilação-vs.-estimação">Compilação vs.&nbsp;estimação</a></li>
+  <li><a href="#sobre-tipos-primitivos" id="toc-sobre-tipos-primitivos" class="nav-link" data-scroll-target="#sobre-tipos-primitivos">Sobre tipos primitivos</a></li>
   </ul></li>
   <li><a href="#blocos" id="toc-blocos" class="nav-link" data-scroll-target="#blocos"><span class="header-section-number">2.2</span> Blocos</a>
   <ul class="collapse">
@@ -271,6 +272,17 @@ window.Quarto = {
 <h3 class="unnumbered anchored" data-anchor-id="compilação-vs.-estimação">Compilação vs.&nbsp;estimação</h3>
 <p>O uso do STAN pode ser dividido em duas etapas: compilação do modelo e construção da cadeia. Uma vez que o modelo está bem especificado (e o script STAN está pronto), é necessário compilar esse código em um arquivo executável (é esse arquivo que tomará amostras de uma cadeia MCMC). Note que</p>
 </section>
+<section id="sobre-tipos-primitivos" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="sobre-tipos-primitivos">Sobre tipos primitivos</h3>
+<!--
+Declaração de suporte
+
+
+The model must have support (non-zero density, equivalently finite log density) at parameter values that satisfy the declared constraints.
+
+If this condition is violated with parameter values that satisfy declared constraints but do not have finite log density, then the samplers and optimizers may have any of a number of pathologies including just getting stuck, failure to initialize, excessive Metropolis rejection, or biased draws due to inability to explore the tails of the distribution.
+-->
+</section>
 </section>
 <section id="blocos" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="blocos"><span class="header-section-number">2.2</span> Blocos</h2>
@@ -295,7 +307,7 @@ window.Quarto = {
 </section>
 <section id="bloco-functions" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="bloco-functions">Bloco functions</h3>
-<p>O bloco <code>functions</code> serve para declarar funções que serão utilizadas ao longo do código Stan. As funções nessa sintaxe seguem a mesma lógica das funções escritas em C++, o que inclui a necessidade de declarar explicitamente o tipo do valor de retorno e o tipo de cada argumento.</p>
+<p>O bloco <code>functions</code> serve para declarar funções que serão utilizadas ao longo do código Stan. As funções nessa sintaxe seguem a mesma lógica das funções escritas em C++, o que inclui a tipagem forte e a sintaxe de escopo.</p>
 </section>
 </section>
 <section id="argumentos-importantes" class="level2" data-number="2.3">
@@ -313,48 +325,33 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">beta =</span> <span class="dv">100</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Dica</span>Sobre chutes iniciais
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Caso o usuário não especifique um chute incial, o algoritmo do STAN tenta escolher valores segundo a seguinte regra</p>
-<p>Caso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, em geral está associado a um modelo mal especifico ou a erros na escrita o script <code>.stan</code>.</p>
-</div>
-</div>
-</div>
+<!--
+::: {.callout-tip collapse="true"}
+
+#### Sobre chutes iniciais 
+
+Caso o usuário não especifique um chute incial, o algoritmo do STAN tenta escolher valores segundo a seguinte regra
+
+Caso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, em geral está associado a um modelo mal especifico ou a erros na escrita o script `.stan`.
+:::
+-->
 <ul>
 <li><code>warmup</code>: o número de iterações que serão excluídas, por default o STAN escolhe o warmup como sendo igual a metade das iterações.</li>
 </ul>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Cuidado</span>Porque não é uma boa ideia diminuir o warmup?
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>É comum que</p>
-<p>Essa filosofia é tão forte no pacote que não é possível alterar o valor do warmup uma vez que a amostragem foi feita. Assim, a função <code>rstan::extract</code> não aceita um argumento de warmup e nem é possível alterar esse atributo num objeto da classe <code>stanfit</code>, via <code>@</code></p>
-</div>
-</div>
-</div>
+<!--
+::: {.callout-caution collapse="true"}
+### Porque não é uma boa ideia diminuir o warmup?
+
+É comum que
+
+Essa filosofia é tão forte no pacote que não é possível alterar o valor do warmup uma vez que a amostragem foi feita. Assim, a função `rstan::extract` não aceita um argumento de warmup e nem é possível alterar esse atributo num objeto da classe `stanfit`, via `@`
+:::
+-->
 <ul>
 <li><code>iter</code>: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).</li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -363,7 +360,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Em alguns softwares de estimação de distribuições (inclusive o CMDSTAN), <code>warmup</code> e <code>iter</code> podem ter significados diferentes dos do rstan. É possível que <code>iter</code> signifique o número de amostras que o programa vai tomar após o <code>warmup</code>, então o total de iterações é dado por <code>warmup</code> + <code>iter</code>. No caso do rstan o total de iterações é <code>iter</code> - e, nesse caso, o tamanho da amostra da posteriori é <code>iter</code> - <code>warmup</code>.</p>
 </div>
@@ -383,6 +380,9 @@ Gelman, Andrew. 2017. <span>«Burn-in vs. warm-up for iterative simulation algor
 </div>
 <div id="ref-mcelreath" class="csl-entry" role="listitem">
 McElreath, Richard. 2020. <em>Statistical Rethinking: A Bayesian Course with Examples in R and Stan</em>. 2.ª ed. CRC Press. <a href="https://www.amazon.com.br/Statistical-Rethinking-Bayesian-Course-Examples/dp/036713991X">https://www.amazon.com.br/Statistical-Rethinking-Bayesian-Course-Examples/dp/036713991X</a>.
+</div>
+<div id="ref-neto" class="csl-entry" role="listitem">
+Neto, João. 2020. <span>«About Stan»</span>. junho de 2020. <a href="https://www.di.fc.ul.pt/~jpn/r/stan/stan.html">https://www.di.fc.ul.pt/~jpn/r/stan/stan.html</a>.
 </div>
 <div id="ref-stan_reference_manual" class="csl-entry" role="listitem">
 Stan Development Team. 2020. <em>Stan Reference Manual: HMC Algorithm Parameters</em>. <a href="https://mc-stan.org/docs/reference-manual/index.html">https://mc-stan.org/docs/reference-manual/index.html</a>.

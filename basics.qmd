@@ -69,6 +69,7 @@ init =
   )
 ```
 
+<!--
 ::: {.callout-tip collapse="true"}
 
 #### Sobre chutes iniciais 
@@ -77,9 +78,11 @@ Caso o usuário não especifique um chute incial, o algoritmo do STAN tenta esco
 
 Caso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, em geral está associado a um modelo mal especifico ou a erros na escrita o script `.stan`.
 :::
+-->
 
 * `warmup`: o número de iterações que serão excluídas, por default o STAN escolhe o warmup como sendo igual a metade das iterações.
 
+<!--
 ::: {.callout-caution collapse="true"}
 ### Porque não é uma boa ideia diminuir o warmup?
 
@@ -87,6 +90,7 @@ Caso a regra resulte num valor impossível a priori, teremos a mensagem . Isso, 
 
 Essa filosofia é tão forte no pacote que não é possível alterar o valor do warmup uma vez que a amostragem foi feita. Assim, a função `rstan::extract` não aceita um argumento de warmup e nem é possível alterar esse atributo num objeto da classe `stanfit`, via `@`
 :::
+-->
 
 * `iter`: o número total de iterações que desejamos rodar para cada uma das cadeias, em geral o STAN reclama caso sejam colocadas poucas iterações (adiante explicaremos o porque).
 
